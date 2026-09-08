@@ -22,33 +22,71 @@ no route to host
 
 ## Recommended solution
 
-Create a user-defined bridge network in MOS, for example:
+Create a dedicated user-defined Docker bridge network in MOS so
+AdGuard Home and AdGuardHome-Sync can communicate directly by container
+name without assigning another LAN IP to AdGuardHome-Sync.
 
-adguard-internal
+### 1. Create the Docker network in MOS
+
+Go to:
+
+**Settings → Docker service → Docker Networks → Add**
+
+Create a network with:
+
+- Name: `adguard-internal`
+- Driver: `bridge`
+- IPv4: enabled
+- Subnet: leave empty
+- Gateway: leave empty
+
+MOS/Docker will automatically assign an available private subnet
+(for example `172.18.0.0/16`).
+
+> Note: despite the name `adguard-internal`, this is not a Docker
+> `--internal` network. It is a normal user-defined bridge network,
+> allowing AdGuardHome-Sync to communicate both with AdGuard Home
+> and with other hosts on the LAN.
+
+### 2. Configure AdGuard Home
 
 Keep AdGuard Home on its normal ipvlan network:
 
-- Network: eth0
-- Custom IP: 192.168.1.78
+- Network: `eth0`
+- Custom IP: your AdGuard Home LAN IP
 
-Then add this to AdGuard Home's Extra Parameters:
+For example:
 
---network name=adguard-internal,alias=adguard-home,gw-priority=-1
+`192.168.1.78`
 
-This gives AdGuard Home two networks:
+Add the following to **Extra Parameters**:
+
+`--network name=adguard-internal,alias=adguard-home,gw-priority=-1`
+
+This connects AdGuard Home to two Docker networks:
 
 - `eth0` / ipvlan → LAN access and DNS service
-- `adguard-internal` → internal Docker communication
+- `adguard-internal` / bridge → communication with AdGuardHome-Sync
 
-Configure AdGuardHome-Sync to use:
+The `gw-priority=-1` setting keeps the ipvlan network as the primary
+/default network for AdGuard Home.
 
-- Network: adguard-internal
-- REPLICA1_URL=http://adguard-home
+### 3. Configure AdGuardHome-Sync
 
-The sync container does not require an additional LAN IP.
+Configure the Sync container with:
 
-The `gw-priority=-1` option keeps the ipvlan network as AdGuard Home's
-primary/default network.
+- Network: `adguard-internal`
+- Custom IP: leave empty
+- `REPLICA1_URL=http://adguard-home`
 
-This configuration survives container recreation by MOS because the
-secondary network is included in Extra Parameters.
+The name `adguard-home` is the Docker network alias configured above.
+
+AdGuardHome-Sync therefore does not need an additional LAN IP.
+
+### Persistence
+
+Because the secondary network is included in AdGuard Home's
+**Extra Parameters**, MOS recreates the container with both networks
+after an update or container recreation.
+
+No manual `docker network connect` command is required after recreation.
