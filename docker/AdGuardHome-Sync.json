@@ -10,7 +10,7 @@
   "default_shell": "sh",
   "privileged": false,
   "extra_parameters": "--restart=unless-stopped",
-  "post_parameters": null,
+  "post_parameters": "run",
   "cpu_set": null,
   "web_ui_url": "http://[IP]:[PORT:8080]/",
   "readme_url": "https://github.com/bakito/adguardhome-sync/blob/main/README.md",
