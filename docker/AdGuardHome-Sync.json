@@ -1,0 +1,134 @@
+{
+  "name": "AdGuardHome-Sync",
+  "repo": "ghcr.io/bakito/adguardhome-sync:latest",
+  "category": ["network"],
+
+  "registry": "https://github.com/bakito/adguardhome-sync/pkgs/container/adguardhome-sync",
+
+  "network": "bridge",
+  "custom_ip": null,
+
+  "default_shell": "sh",
+  "privileged": false,
+
+  "extra_parameters": "--restart unless-stopped",
+  "post_parameters": "run",
+  "cpu_set": null,
+
+  "web_ui_url": "http://[IP]:[PORT:8080]/",
+
+  "icon": "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/adguard-home.png",
+
+  "project": "https://github.com/bakito/adguardhome-sync",
+  "support": "https://github.com/bakito/adguardhome-sync/issues",
+
+  "description": "Synchronize the configuration of one AdGuard Home instance to one or more replicas.",
+
+  "paths": [],
+
+  "ports": [
+    {
+      "name": "Web UI / API",
+      "host": "8080",
+      "container": "8080",
+      "protocol": "tcp",
+      "description": "AdGuardHome-Sync web dashboard and API",
+      "required": false,
+      "mask": false
+    }
+  ],
+
+  "variables": [
+    {
+      "name": "Origin URL",
+      "key": "ORIGIN_URL",
+      "value": "http://192.168.1.10",
+      "description": "URL of the source AdGuard Home instance",
+      "required": true,
+      "mask": false
+    },
+    {
+      "name": "Origin Username",
+      "key": "ORIGIN_USERNAME",
+      "value": "",
+      "description": "Username of the source AdGuard Home instance",
+      "required": true,
+      "mask": false
+    },
+    {
+      "name": "Origin Password",
+      "key": "ORIGIN_PASSWORD",
+      "value": "",
+      "description": "Password of the source AdGuard Home instance",
+      "required": true,
+      "mask": true
+    },
+    {
+      "name": "Replica 1 URL",
+      "key": "REPLICA1_URL",
+      "value": "http://192.168.1.11",
+      "description": "URL of the first replica AdGuard Home instance",
+      "required": true,
+      "mask": false
+    },
+    {
+      "name": "Replica 1 Username",
+      "key": "REPLICA1_USERNAME",
+      "value": "",
+      "description": "Username of the replica",
+      "required": true,
+      "mask": false
+    },
+    {
+      "name": "Replica 1 Password",
+      "key": "REPLICA1_PASSWORD",
+      "value": "",
+      "description": "Password of the replica",
+      "required": true,
+      "mask": true
+    },
+    {
+      "name": "Cron Schedule",
+      "key": "CRON",
+      "value": "0 */2 * * *",
+      "description": "Synchronization schedule",
+      "required": false,
+      "mask": false
+    },
+    {
+      "name": "Run On Start",
+      "key": "RUN_ON_START",
+      "value": "true",
+      "description": "Run a synchronization when the container starts",
+      "required": false,
+      "mask": false
+    },
+    {
+      "name": "API Port",
+      "key": "API_PORT",
+      "value": "8080",
+      "description": "Web dashboard/API port",
+      "required": false,
+      "mask": false
+    },
+    {
+      "name": "Timezone",
+      "key": "TZ",
+      "value": "Europe/Madrid",
+      "description": "Container timezone",
+      "required": false,
+      "mask": false
+    },
+    {
+      "name": "Log Level",
+      "key": "LOG_LEVEL",
+      "value": "info",
+      "description": "Log level: debug, info, warn or error",
+      "required": false,
+      "mask": false
+    }
+  ],
+
+  "devices": [],
+  "labels": []
+}
