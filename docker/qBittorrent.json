@@ -1,0 +1,107 @@
+{
+  "name": "qBittorrent",
+  "repo": "qbittorrentofficial/qbittorrent-nox:latest",
+  "category": [
+    "downloaders"
+  ],
+  "registry": "https://hub.docker.com/r/qbittorrentofficial/qbittorrent-nox",
+  "network": "bridge",
+  "custom_ip": null,
+  "default_shell": "sh",
+  "privileged": false,
+  "extra_parameters": "--restart=unless-stopped --stop-timeout=1800",
+  "post_parameters": null,
+  "cpu_set": null,
+  "web_ui_url": "http://[IP]:[PORT:8080]/",
+  "readme_url": "https://github.com/qbittorrent/docker-qbittorrent-nox",
+  "icon": "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/qbittorrent.png",
+  "project": "https://www.qbittorrent.org/",
+  "support": "https://github.com/qbittorrent/docker-qbittorrent-nox/issues",
+  "description": "Official headless qBittorrent client with WebUI.",
+  "paths": [
+    {
+      "name": "Config",
+      "host": "/mnt/cache/appdata/qbittorrent",
+      "container": "/config",
+      "mode": "rw",
+      "description": "Persistent qBittorrent configuration and session data."
+    },
+    {
+      "name": "Downloads",
+      "host": "/mnt/user/downloads",
+      "container": "/downloads",
+      "mode": "rw",
+      "description": "Torrent download directory."
+    }
+  ],
+  "ports": [
+    {
+      "name": "Web UI",
+      "protocol": "tcp",
+      "host": "8080",
+      "container": "8080",
+      "description": "qBittorrent WebUI."
+    },
+    {
+      "name": "BitTorrent TCP",
+      "protocol": "tcp",
+      "host": "6881",
+      "container": "6881",
+      "description": "Incoming BitTorrent TCP connections."
+    },
+    {
+      "name": "BitTorrent UDP",
+      "protocol": "udp",
+      "host": "6881",
+      "container": "6881",
+      "description": "Incoming BitTorrent UDP connections."
+    }
+  ],
+  "variables": [
+    {
+      "name": "Legal Notice",
+      "key": "QBT_LEGAL_NOTICE",
+      "value": "",
+      "mask": false,
+      "description": "Set to confirm after reading and accepting qBittorrent's legal notice."
+    },
+    {
+      "name": "WebUI Port",
+      "key": "QBT_WEBUI_PORT",
+      "value": "8080",
+      "mask": false,
+      "description": "Internal qBittorrent WebUI port."
+    },
+    {
+      "name": "Torrenting Port",
+      "key": "QBT_TORRENTING_PORT",
+      "value": "6881",
+      "mask": false,
+      "description": "Internal BitTorrent listening port. TCP and UDP mappings must match."
+    },
+    {
+      "name": "User ID",
+      "key": "PUID",
+      "value": "1000",
+      "mask": false,
+      "description": "UID used by qBittorrent."
+    },
+    {
+      "name": "Group ID",
+      "key": "PGID",
+      "value": "1000",
+      "mask": false,
+      "description": "GID used by qBittorrent."
+    },
+    {
+      "name": "UMASK",
+      "key": "UMASK",
+      "value": "022",
+      "mask": false,
+      "description": "Permission mask for files created by qBittorrent."
+    }
+  ],
+  "devices": [],
+  "labels": [],
+  "gpus": []
+}
