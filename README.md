@@ -20,3 +20,21 @@
 | SoulSync | Media / Downloader | 🧪 Awaiting MOS validation | [Guide](docs/soulsync-slskd.md) |
 | Valkey | System | 🧪 Awaiting MOS validation | [Guide](docs/valkey.md) |
 | YoutubeDL-Material | Downloader / Media | 🧪 Awaiting MOS validation | Upstream |
+
+## MOS storage paths
+
+Templates use `/mnt/cache/appdata/...` as the generic MOS Hub appdata path.
+
+Replace `cache` with the name of the pool used for appdata on your MOS system
+when required.
+
+## Status
+
+**✅ Tested on MOS**
+
+The template has been deployed and functionally validated on MOS.
+
+**🧪 Upstream reviewed / awaiting MOS validation**
+
+The template has been reviewed against current upstream documentation but has
+not yet completed a clean MOS deployment test.
