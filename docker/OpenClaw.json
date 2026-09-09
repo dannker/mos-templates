@@ -2,8 +2,8 @@
   "name": "OpenClaw",
   "repo": "ghcr.io/openclaw/openclaw:latest",
   "category": [
-    "ai",
-    "productivity"
+    "AI",
+    "Productivity"
   ],
   "registry": "https://github.com/openclaw/openclaw/pkgs/container/openclaw",
   "network": "bridge",
@@ -11,11 +11,11 @@
   "default_shell": "sh",
   "privileged": false,
   "extra_parameters": "--restart=unless-stopped --cap-drop=NET_RAW --cap-drop=NET_ADMIN --security-opt=no-new-privileges:true --add-host=host.docker.internal:host-gateway",
-  "post_parameters": "node openclaw.mjs gateway --bind lan --port 18789",
+  "post_parameters": "node dist/index.js gateway --bind lan --port 18789",
   "cpu_set": null,
   "web_ui_url": "http://[IP]:[PORT:18789]/",
-  "readme_url": "https://github.com/openclaw/openclaw/blob/main/docs/install/docker.md",
-  "icon": "https://raw.githubusercontent.com/selfhosters/unRAID-CA-templates/master/templates/img/openclaw.png",
+  "readme_url": "https://github.com/dannker/mos-templates/blob/main/docs/openclaw.md",
+  "icon": "https://raw.githubusercontent.com/dannker/mos-templates/main/images/OpenClaw.png",
   "project": "https://github.com/openclaw/openclaw",
   "support": "https://github.com/openclaw/openclaw/issues",
   "description": "OpenClaw is an AI assistant gateway with persistent memory, tools, skills, automation and integrations with messaging platforms.",
@@ -25,14 +25,14 @@
       "host": "/mnt/cache/appdata/openclaw/state",
       "container": "/home/node/.openclaw",
       "mode": "rw",
-      "description": "Persistent OpenClaw configuration, sessions, memory, skills and workspace."
+      "description": "Persistent OpenClaw configuration, sessions, memory, skills and workspace. Must be writable by the container node user (UID 1000)."
     },
     {
       "name": "Auth Profile Secrets",
       "host": "/mnt/cache/appdata/openclaw/auth",
       "container": "/home/node/.config/openclaw",
       "mode": "rw",
-      "description": "Persistent authentication profile secrets."
+      "description": "Persistent authentication profile secrets. Must be writable by the container node user (UID 1000)."
     }
   ],
   "ports": [
@@ -50,7 +50,7 @@
       "key": "OPENCLAW_GATEWAY_TOKEN",
       "value": "",
       "mask": true,
-      "description": "Secret token used to authenticate access to the OpenClaw Gateway."
+      "description": "Secret token used to authenticate access to the OpenClaw Gateway. Required for a LAN-bound gateway."
     },
     {
       "name": "OpenAI API Key",
