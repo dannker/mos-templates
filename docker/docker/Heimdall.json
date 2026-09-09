@@ -1,0 +1,72 @@
+{
+  "name": "Heimdall",
+  "repo": "lscr.io/linuxserver/heimdall:latest",
+  "category": [
+    "dashboard"
+  ],
+  "registry": "https://github.com/linuxserver/docker-heimdall/pkgs/container/heimdall",
+  "network": "bridge",
+  "custom_ip": null,
+  "default_shell": "bash",
+  "privileged": false,
+  "extra_parameters": "--restart=unless-stopped",
+  "post_parameters": null,
+  "cpu_set": null,
+  "web_ui_url": "http://[IP]:[PORT:80]/",
+  "readme_url": "https://docs.linuxserver.io/images/docker-heimdall/",
+  "icon": "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/heimdall.png",
+  "project": "https://heimdall.site/",
+  "support": "https://github.com/linuxserver/docker-heimdall/issues",
+  "description": "Heimdall is an application dashboard for organising links to your most used websites and web applications.",
+  "paths": [
+    {
+      "name": "Config",
+      "host": "/mnt/cache/appdata/heimdall",
+      "container": "/config",
+      "mode": "rw",
+      "description": "Persistent Heimdall configuration and application data."
+    }
+  ],
+  "ports": [
+    {
+      "name": "HTTP Web UI",
+      "protocol": "tcp",
+      "host": "80",
+      "container": "80",
+      "description": "Heimdall HTTP web interface."
+    },
+    {
+      "name": "HTTPS Web UI",
+      "protocol": "tcp",
+      "host": "443",
+      "container": "443",
+      "description": "Heimdall HTTPS web interface."
+    }
+  ],
+  "variables": [
+    {
+      "name": "PUID",
+      "key": "PUID",
+      "value": "1000",
+      "mask": false,
+      "description": "User ID used by the container for file permissions."
+    },
+    {
+      "name": "PGID",
+      "key": "PGID",
+      "value": "1000",
+      "mask": false,
+      "description": "Group ID used by the container for file permissions."
+    },
+    {
+      "name": "Allow Internal Requests",
+      "key": "ALLOW_INTERNAL_REQUESTS",
+      "value": "false",
+      "mask": false,
+      "description": "Allow Heimdall to make lookup requests to private or reserved IP addresses."
+    }
+  ],
+  "devices": [],
+  "labels": [],
+  "gpus": []
+}
