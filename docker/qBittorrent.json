@@ -2,19 +2,19 @@
   "name": "qBittorrent",
   "repo": "qbittorrentofficial/qbittorrent-nox:latest",
   "category": [
-    "downloaders"
+    "Downloader"
   ],
   "registry": "https://hub.docker.com/r/qbittorrentofficial/qbittorrent-nox",
   "network": "bridge",
   "custom_ip": null,
   "default_shell": "sh",
   "privileged": false,
-  "extra_parameters": "--restart=unless-stopped --stop-timeout=1800",
+  "extra_parameters": "--restart=unless-stopped --stop-timeout 1800 --tmpfs /tmp",
   "post_parameters": null,
   "cpu_set": null,
   "web_ui_url": "http://[IP]:[PORT:8080]/",
-  "readme_url": "https://github.com/qbittorrent/docker-qbittorrent-nox",
-  "icon": "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/qbittorrent.png",
+  "readme_url": "https://github.com/dannker/mos-templates/blob/main/docs/qbittorrent-migration.md",
+  "icon": "https://raw.githubusercontent.com/dannker/mos-templates/main/images/qBittorrent.png",
   "project": "https://www.qbittorrent.org/",
   "support": "https://github.com/qbittorrent/docker-qbittorrent-nox/issues",
   "description": "Official headless qBittorrent client with WebUI.",
@@ -63,14 +63,14 @@
       "key": "QBT_LEGAL_NOTICE",
       "value": "",
       "mask": false,
-      "description": "Set to confirm after reading and accepting qBittorrent's legal notice."
+      "description": "After reading qBittorrent's legal notice, enter confirm to acknowledge it."
     },
     {
       "name": "WebUI Port",
       "key": "QBT_WEBUI_PORT",
       "value": "8080",
       "mask": false,
-      "description": "Internal qBittorrent WebUI port."
+      "description": "Internal qBittorrent WebUI port. The Docker port mapping must match."
     },
     {
       "name": "Torrenting Port",
@@ -82,16 +82,16 @@
     {
       "name": "User ID",
       "key": "PUID",
-      "value": "1000",
+      "value": "500",
       "mask": false,
-      "description": "UID used by qBittorrent."
+      "description": "UID used by qBittorrent. MOS recommended default: 500."
     },
     {
       "name": "Group ID",
       "key": "PGID",
-      "value": "1000",
+      "value": "500",
       "mask": false,
-      "description": "GID used by qBittorrent."
+      "description": "GID used by qBittorrent. MOS recommended default: 500."
     },
     {
       "name": "UMASK",
