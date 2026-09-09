@@ -1,0 +1,157 @@
+{
+  "name": "Immich-Kiosk",
+  "repo": "ghcr.io/damongolding/immich-kiosk:latest",
+  "category": [
+    "media",
+    "photos"
+  ],
+  "registry": "https://github.com/damongolding/immich-kiosk/pkgs/container/immich-kiosk",
+  "network": "bridge",
+  "custom_ip": null,
+  "default_shell": "sh",
+  "privileged": false,
+  "extra_parameters": "--restart=unless-stopped --health-cmd=\"/kiosk --healthcheck\" --health-interval=30s --health-timeout=5s --health-retries=3 --health-start-period=10s",
+  "post_parameters": null,
+  "cpu_set": null,
+  "web_ui_url": "http://[IP]:[PORT:3000]/",
+  "readme_url": "https://docs.immichkiosk.app/",
+  "icon": "https://raw.githubusercontent.com/nwithan8/unraid_templates/master/images/immich-kiosk-icon.png",
+  "project": "https://github.com/damongolding/immich-kiosk",
+  "support": "https://github.com/damongolding/immich-kiosk/issues",
+  "description": "A configurable web slideshow and digital photo frame for Immich.",
+  "paths": [
+    {
+      "name": "Config",
+      "host": "/mnt/cache/appdata/immich-kiosk",
+      "container": "/config",
+      "mode": "rw",
+      "description": "Optional Immich Kiosk config.yaml and related configuration files."
+    }
+  ],
+  "ports": [
+    {
+      "name": "Web UI",
+      "protocol": "tcp",
+      "host": "3000",
+      "container": "3000",
+      "description": "Immich Kiosk web interface."
+    }
+  ],
+  "variables": [
+    {
+      "name": "Immich URL",
+      "key": "KIOSK_IMMICH_URL",
+      "value": "",
+      "mask": false,
+      "description": "URL of the Immich server, including port if required."
+    },
+    {
+      "name": "Immich API Key",
+      "key": "KIOSK_IMMICH_API_KEY",
+      "value": "",
+      "mask": true,
+      "description": "Immich API key used by Kiosk."
+    },
+    {
+      "name": "Duration",
+      "key": "KIOSK_DURATION",
+      "value": "60",
+      "mask": false,
+      "description": "Number of seconds each image or asset is displayed."
+    },
+    {
+      "name": "Albums",
+      "key": "KIOSK_ALBUMS",
+      "value": "",
+      "mask": false,
+      "description": "Optional comma-separated Immich album IDs."
+    },
+    {
+      "name": "People",
+      "key": "KIOSK_PEOPLE",
+      "value": "",
+      "mask": false,
+      "description": "Optional comma-separated Immich person IDs."
+    },
+    {
+      "name": "Show Time",
+      "key": "KIOSK_SHOW_TIME",
+      "value": "false",
+      "mask": false,
+      "description": "Display the current time."
+    },
+    {
+      "name": "Time Format",
+      "key": "KIOSK_TIME_FORMAT",
+      "value": "24",
+      "mask": false,
+      "description": "Clock format: 12 or 24."
+    },
+    {
+      "name": "Show Date",
+      "key": "KIOSK_SHOW_DATE",
+      "value": "false",
+      "mask": false,
+      "description": "Display the current date."
+    },
+    {
+      "name": "Date Format",
+      "key": "KIOSK_DATE_FORMAT",
+      "value": "YYYY/MM/DD",
+      "mask": false,
+      "description": "Current date display format."
+    },
+    {
+      "name": "Image Fit",
+      "key": "KIOSK_IMAGE_FIT",
+      "value": "contain",
+      "mask": false,
+      "description": "Image fitting mode: contain, cover or none."
+    },
+    {
+      "name": "Background Blur",
+      "key": "KIOSK_BACKGROUND_BLUR",
+      "value": "true",
+      "mask": false,
+      "description": "Display a blurred copy of the image as the background."
+    },
+    {
+      "name": "Transition",
+      "key": "KIOSK_TRANSITION",
+      "value": "none",
+      "mask": false,
+      "description": "Image transition effect."
+    },
+    {
+      "name": "Show Progress Bar",
+      "key": "KIOSK_SHOW_PROGRESS_BAR",
+      "value": "false",
+      "mask": false,
+      "description": "Show the progress bar for the current slide."
+    },
+    {
+      "name": "Cache",
+      "key": "KIOSK_CACHE",
+      "value": "true",
+      "mask": false,
+      "description": "Cache selected Immich API calls."
+    },
+    {
+      "name": "Prefetch",
+      "key": "KIOSK_PREFETCH",
+      "value": "true",
+      "mask": false,
+      "description": "Prefetch upcoming assets for smoother transitions."
+    },
+    {
+      "name": "Kiosk Password",
+      "key": "KIOSK_PASSWORD",
+      "value": "",
+      "mask": true,
+      "description": "Optional password required when accessing the Kiosk."
+    }
+  ],
+  "devices": [],
+  "labels": [],
+  "gpus": []
+}
