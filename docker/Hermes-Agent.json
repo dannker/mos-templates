@@ -2,7 +2,7 @@
   "name": "Hermes-Agent",
   "repo": "nousresearch/hermes-agent:latest",
   "category": [
-    "ai"
+    "AI"
   ],
   "registry": "https://hub.docker.com/r/nousresearch/hermes-agent",
   "network": "bridge",
@@ -14,7 +14,7 @@
   "cpu_set": null,
   "web_ui_url": "http://[IP]:[PORT:9119]/",
   "readme_url": "https://hermes-agent.nousresearch.com/docs/user-guide/docker/",
-  "icon": "https://djeqr6to3dedg.cloudfront.net/repo-logos/nousresearch/hermes-agent/live/logo-1774844365621.png",
+  "icon": "https://raw.githubusercontent.com/dannker/mos-templates/main/images/Hermes-Agent.png",
   "project": "https://hermes-agent.nousresearch.com/",
   "support": "https://github.com/NousResearch/hermes-agent/issues",
   "description": "Hermes Agent is a self-improving AI agent with persistent memory, skills, tools and messaging gateways.",
@@ -47,23 +47,44 @@
     {
       "name": "User ID",
       "key": "PUID",
-      "value": "1000",
+      "value": "500",
       "mask": false,
-      "description": "UID used by Hermes to access persistent data."
+      "description": "UID used by Hermes to access persistent data. MOS recommended default: 500."
     },
     {
       "name": "Group ID",
       "key": "PGID",
-      "value": "1000",
+      "value": "500",
       "mask": false,
-      "description": "GID used by Hermes to access persistent data."
+      "description": "GID used by Hermes to access persistent data. MOS recommended default: 500."
     },
     {
       "name": "Enable Dashboard",
       "key": "HERMES_DASHBOARD",
-      "value": "1",
+      "value": "0",
       "mask": false,
-      "description": "Enable the built-in Hermes dashboard on port 9119."
+      "description": "Enable the built-in dashboard on port 9119. Configure dashboard authentication before setting this to 1."
+    },
+    {
+      "name": "Dashboard Username",
+      "key": "HERMES_DASHBOARD_BASIC_AUTH_USERNAME",
+      "value": "admin",
+      "mask": false,
+      "description": "Username for dashboard basic authentication on trusted LAN or VPN deployments."
+    },
+    {
+      "name": "Dashboard Password",
+      "key": "HERMES_DASHBOARD_BASIC_AUTH_PASSWORD",
+      "value": "",
+      "mask": true,
+      "description": "Password for dashboard basic authentication. Required when using the dashboard with basic authentication."
+    },
+    {
+      "name": "Dashboard Session Secret",
+      "key": "HERMES_DASHBOARD_BASIC_AUTH_SECRET",
+      "value": "",
+      "mask": true,
+      "description": "Persistent signing secret for dashboard sessions. Generate a strong random value so sessions survive container restarts."
     },
     {
       "name": "Enable API Server",
@@ -75,16 +96,16 @@
     {
       "name": "API Server Host",
       "key": "API_SERVER_HOST",
-      "value": "0.0.0.0",
+      "value": "127.0.0.1",
       "mask": false,
-      "description": "Bind address used when the API server is enabled."
+      "description": "API bind address. Change to 0.0.0.0 only when enabling remote API access with authentication."
     },
     {
       "name": "API Server Key",
       "key": "API_SERVER_KEY",
       "value": "",
       "mask": true,
-      "description": "Authentication token required when the API server is enabled."
+      "description": "Bearer token required when exposing the API server."
     }
   ],
   "devices": [],
