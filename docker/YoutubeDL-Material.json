@@ -1,0 +1,117 @@
+{
+  "name": "YoutubeDL-Material",
+  "repo": "tzahi12345/youtubedl-material:latest",
+  "category": [
+    "downloaders",
+    "media",
+    "video",
+    "music"
+  ],
+  "registry": "https://hub.docker.com/r/tzahi12345/youtubedl-material",
+  "network": "bridge",
+  "custom_ip": null,
+  "default_shell": "sh",
+  "privileged": false,
+  "extra_parameters": "--restart=unless-stopped",
+  "post_parameters": null,
+  "cpu_set": null,
+  "web_ui_url": "http://[IP]:[PORT:17442]/",
+  "readme_url": "https://github.com/Tzahi12345/YoutubeDL-Material",
+  "icon": "https://raw.githubusercontent.com/selfhosters/unRAID-CA-templates/master/templates/img/youtubedl-material.png",
+  "project": "https://github.com/Tzahi12345/YoutubeDL-Material",
+  "support": "https://github.com/Tzahi12345/YoutubeDL-Material/issues",
+  "description": "Self-hosted YouTube and media downloader with a modern Material Design web interface.",
+  "paths": [
+    {
+      "name": "AppData",
+      "host": "/mnt/cache/appdata/youtubedl-material",
+      "container": "/app/appdata",
+      "mode": "rw",
+      "description": "Persistent YoutubeDL-Material configuration and local database."
+    },
+    {
+      "name": "Audio Downloads",
+      "host": "/mnt/user/downloads/youtubedl-material/audio",
+      "container": "/app/audio",
+      "mode": "rw",
+      "description": "Downloaded audio files."
+    },
+    {
+      "name": "Video Downloads",
+      "host": "/mnt/user/downloads/youtubedl-material/video",
+      "container": "/app/video",
+      "mode": "rw",
+      "description": "Downloaded video files."
+    },
+    {
+      "name": "Subscriptions",
+      "host": "/mnt/user/downloads/youtubedl-material/subscriptions",
+      "container": "/app/subscriptions",
+      "mode": "rw",
+      "description": "Media downloaded from subscriptions."
+    },
+    {
+      "name": "Users",
+      "host": "/mnt/cache/appdata/youtubedl-material/users",
+      "container": "/app/users",
+      "mode": "rw",
+      "description": "Persistent data for multi-user installations."
+    }
+  ],
+  "ports": [
+    {
+      "name": "Web UI",
+      "protocol": "tcp",
+      "host": "17442",
+      "container": "17442",
+      "description": "YoutubeDL-Material web interface."
+    }
+  ],
+  "variables": [
+    {
+      "name": "User ID",
+      "key": "UID",
+      "value": "1000",
+      "mask": false,
+      "description": "User ID used by YoutubeDL-Material."
+    },
+    {
+      "name": "Group ID",
+      "key": "GID",
+      "value": "1000",
+      "mask": false,
+      "description": "Group ID used by YoutubeDL-Material."
+    },
+    {
+      "name": "Allow Config Mutations",
+      "key": "ALLOW_CONFIG_MUTATIONS",
+      "value": "true",
+      "mask": false,
+      "description": "Allow the application to update its configuration."
+    },
+    {
+      "name": "Use Local Database",
+      "key": "ytdl_use_local_db",
+      "value": "true",
+      "mask": false,
+      "description": "Use the built-in local JSON database instead of MongoDB."
+    },
+    {
+      "name": "Advanced Downloads",
+      "key": "ytdl_allow_advanced_download",
+      "value": "true",
+      "mask": false,
+      "description": "Enable advanced download options in the web interface."
+    },
+    {
+      "name": "Web UI Title",
+      "key": "ytdl_title_top",
+      "value": "YoutubeDL-Material",
+      "mask": false,
+      "description": "Title displayed in the web interface."
+    }
+  ],
+  "devices": [],
+  "labels": [],
+  "gpus": []
+}
