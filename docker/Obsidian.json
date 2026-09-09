@@ -2,8 +2,7 @@
   "name": "Obsidian",
   "repo": "lscr.io/linuxserver/obsidian:latest",
   "category": [
-    "productivity",
-    "tools"
+    "Productivity"
   ],
   "registry": "https://github.com/orgs/linuxserver/packages/container/package/obsidian",
   "network": "bridge",
@@ -14,8 +13,8 @@
   "post_parameters": null,
   "cpu_set": null,
   "web_ui_url": "https://[IP]:[PORT:3001]/",
-  "readme_url": "https://github.com/linuxserver/docker-obsidian",
-  "icon": "https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/obsidian-logo.png",
+  "readme_url": "https://docs.linuxserver.io/images/docker-obsidian/",
+  "icon": "https://raw.githubusercontent.com/dannker/mos-templates/main/images/Obsidian.png",
   "project": "https://obsidian.md/",
   "support": "https://github.com/linuxserver/docker-obsidian/issues",
   "description": "Web-accessible Obsidian desktop application for creating, linking and organizing Markdown notes.",
@@ -34,7 +33,7 @@
       "protocol": "tcp",
       "host": "3000",
       "container": "3000",
-      "description": "Obsidian desktop GUI over HTTP. Should only be used behind a reverse proxy."
+      "description": "Obsidian desktop GUI over HTTP. Intended for reverse proxy use."
     },
     {
       "name": "HTTPS",
@@ -48,16 +47,16 @@
     {
       "name": "User ID",
       "key": "PUID",
-      "value": "1000",
+      "value": "500",
       "mask": false,
-      "description": "UID used for files created inside /config."
+      "description": "UID used for files created inside /config. MOS recommended default: 500."
     },
     {
       "name": "Group ID",
       "key": "PGID",
-      "value": "1000",
+      "value": "500",
       "mask": false,
-      "description": "GID used for files created inside /config."
+      "description": "GID used for files created inside /config. MOS recommended default: 500."
     },
     {
       "name": "UMASK",
