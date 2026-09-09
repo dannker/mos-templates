@@ -1,369 +1,338 @@
-# SoulSync + slskd en MOS
+# SoulSync + slskd on MOS
 
-Guía de referencia para preparar la futura migración de **Tower (Unraid) → MOS** y recordar cómo deben relacionarse `slskd`, `SoulSync` y `Navidrome`.
+This guide documents a practical MOS deployment of
+[SoulSync](https://github.com/Nezreka/SoulSync) together with
+[slskd](https://github.com/slskd/slskd).
 
-> Esta guía no contiene contraseñas, API keys ni rutas personales definitivas. Los secretos deben configurarse únicamente en la instalación local.
+The goal is to keep both containers independent while sharing the same download
+directory, so SoulSync can process files downloaded by slskd and move organized
+music into the final media library.
 
-## 1. Arquitectura prevista
+## Template status
 
-```text
-Soulseek
-   │
-   ▼
- slskd
-   │
-   │ descarga
-   ▼
-incoming / downloads
-   │
-   ▼
-SoulSync
-   │
-   │ organiza / mueve
-   ▼
-Music Library
-   │
-   ▼
-Navidrome
-```
+- Upstream reviewed
+- MOS templates prepared
+- MOS validation pending
 
-La idea importante es que **slskd y SoulSync deben ver la misma carpeta física de descargas del host**, aunque dentro de cada contenedor tenga una ruta distinta.
+## Recommended layout
 
-Ejemplo:
-
-```text
-HOST
-/mnt/.../music/incoming
-        │
-        ├── slskd    → /downloads
-        └── SoulSync → /app/downloads
-```
-
-Y la biblioteca final:
-
-```text
-HOST
-/mnt/.../music/albums
-        │
-        ├── SoulSync  → /app/Transfer
-        └── Navidrome → /music
-```
-
-## 2. slskd
-
-### Imagen
-
-```text
-slskd/slskd:latest
-```
-
-### Puertos
-
-```text
-5030/tcp   Web UI HTTP
-5031/tcp   Web UI HTTPS
-50300/tcp  Soulseek
-```
-
-### Persistencia
-
-```text
-/app        Configuración y datos de slskd
-/downloads  Descargas
-/music      Biblioteca compartida con Soulseek
-```
-
-Recomendación:
-
-```text
-/app        rw
-/downloads  rw
-/music      ro
-```
-
-### Variables principales
-
-```text
-SLSKD_REMOTE_CONFIGURATION=true
-SLSKD_DOWNLOADS_DIR=/downloads
-SLSKD_SHARED_DIR=[Music]/music
-```
-
-Las credenciales de Soulseek, usuario/password de la Web UI y la API key se configuran localmente.
-
-## 3. SoulSync
-
-### Imagen
-
-```text
-boulderbadgedad/soulsync:latest
-```
-
-### Puertos
-
-```text
-8008/tcp  Web UI
-8888/tcp  Spotify OAuth
-8889/tcp  Tidal OAuth
-```
-
-### Persistencia recomendada
-
-```text
-/app/config       Configuración
-/app/data         Bases de datos
-/app/logs         Logs
-/app/downloads    Descargas compartidas con slskd
-/app/Transfer     Biblioteca musical organizada
-/app/MusicVideos  Vídeos musicales opcionales
-```
-
-Ejemplo de rutas MOS:
-
-```text
-/mnt/cache/appdata/soulsync/config  → /app/config
-/mnt/cache/appdata/soulsync/data    → /app/data
-/mnt/cache/appdata/soulsync/logs    → /app/logs
-
-/mnt/.../music/incoming             → /app/downloads
-/mnt/.../music/albums               → /app/Transfer
-```
-
-## 4. Comunicación SoulSync → slskd
-
-SoulSync necesita poder acceder a la API de slskd.
-
-Hay dos formas razonables.
-
-### Opción A — red Docker compartida
-
-Crear una red bridge de usuario, por ejemplo:
-
-```text
-music-stack
-```
-
-y conectar ambos contenedores a ella.
-
-Se puede dar a slskd un alias estable:
+A simple MOS layout is:
 
 ```text
 slskd
+  |
+  | downloads
+  v
+/mnt/user/downloads/soulsync
+  |
+  +--> slskd:    /downloads
+  |
+  +--> SoulSync: /app/downloads
+                    |
+                    v
+               processing
+                    |
+                    v
+                /app/Transfer
+                    |
+                    v
+             final music library
 ```
 
-SoulSync podría entonces usar:
+The important part is that both containers see the **same host directory** for
+downloads.
+
+## SoulSync persistent directories
+
+Recommended mappings:
+
+| Host path | Container path | Purpose |
+|---|---|---|
+| `/mnt/cache/appdata/soulsync/config` | `/app/config` | SoulSync configuration |
+| `/mnt/cache/appdata/soulsync/data` | `/app/data` | Persistent application/database data |
+| `/mnt/cache/appdata/soulsync/logs` | `/app/logs` | Logs |
+| `/mnt/cache/appdata/soulsync/staging` | `/app/Staging` | Staging/import area |
+| `/mnt/user/downloads/soulsync` | `/app/downloads` | Shared slskd download directory |
+| `/mnt/user/music` | `/app/Transfer` | Final organized music library |
+| `/mnt/user/music-videos` | `/app/MusicVideos` | Optional music-video destination |
+
+The public template uses generic MOS paths. Adjust them to match your actual
+storage layout.
+
+## User and group IDs
+
+The MOS template defaults to:
+
+```text
+PUID=500
+PGID=500
+UMASK=022
+```
+
+Both SoulSync and slskd should be able to read and write the shared download
+directory.
+
+Using compatible UID/GID values across both containers makes shared-directory
+permissions much easier to manage.
+
+## slskd integration
+
+For slskd, map the same host directory used by SoulSync:
+
+```text
+Host:
+/mnt/user/downloads/soulsync
+
+Container:
+/downloads
+```
+
+For SoulSync:
+
+```text
+Host:
+/mnt/user/downloads/soulsync
+
+Container:
+/app/downloads
+```
+
+From the host's point of view, both paths refer to the same files.
+
+This avoids copying downloads between containers.
+
+## Final music library
+
+SoulSync writes organized music to:
+
+```text
+/app/Transfer
+```
+
+A typical MOS mapping is:
+
+```text
+/mnt/user/music -> /app/Transfer
+```
+
+Media servers can then mount the same host library read-only.
+
+Example:
+
+```text
+Navidrome:
+/mnt/user/music -> /music:ro
+```
+
+The same principle can be used with Jellyfin or Plex.
+
+## Networking between SoulSync and slskd
+
+There are two reasonable approaches.
+
+### Shared Docker network
+
+The preferred approach is to attach both containers to the same user-defined
+Docker network.
+
+SoulSync can then reach slskd using its container name or network alias.
+
+Example:
 
 ```text
 http://slskd:5030
 ```
 
-Esta es la opción preferida si ambos contenedores viven permanentemente en el mismo host MOS.
+This avoids depending on the MOS host address.
 
-### Opción B — puerto publicado del host
+### Host gateway
 
-Si SoulSync dispone de:
+The SoulSync template also includes:
 
 ```text
 --add-host=host.docker.internal:host-gateway
 ```
 
-puede acceder al puerto publicado de slskd mediante:
+This makes `host.docker.internal` available inside the container.
+
+It can be useful when SoulSync must reach a service exposed through the MOS host
+rather than through a shared Docker network.
+
+Use the shared Docker network when possible.
+
+## OAuth callback ports
+
+The template exposes:
 
 ```text
-http://host.docker.internal:5030
+8888/TCP  Spotify OAuth callback
+8889/TCP  Tidal OAuth callback
 ```
 
-## 5. API Key
+The callback port configured in SoulSync must match the Docker port mapping and
+the redirect URI configured with the provider.
 
-En slskd se genera/configura una API key.
+If these integrations are not used, the ports can be left unused.
 
-SoulSync necesita esa API key para comunicarse con slskd.
+# Migrating an existing SoulSync installation
 
-Nunca debe incluirse una API key real en:
+This section applies when moving an existing Docker, Unraid, NAS, or Linux
+SoulSync deployment to MOS.
 
-```text
-dannker/mos-templates
-```
+## 1. Stop SoulSync
 
-La API key se configura únicamente en la instalación local de Tower.
+Stop the current SoulSync container before copying persistent data.
 
-## 6. Navidrome
+This prevents the database or configuration from changing while it is being
+copied.
 
-Navidrome utilizará la biblioteca final organizada por SoulSync.
+## 2. Identify every existing mount and Docker volume
 
-Ejemplo:
+Older or customized SoulSync deployments may use a mixture of bind mounts,
+named volumes, and anonymous Docker volumes.
 
-```text
-SoulSync
-/mnt/.../music/albums → /app/Transfer:rw
+Do not assume that an anonymous volume is empty.
 
-Navidrome
-/mnt/.../music/albums → /music:ro
-```
-
-Así SoulSync puede escribir y organizar la biblioteca mientras que Navidrome únicamente necesita leerla.
-
-# Migración futura desde Unraid
-
-## 7. slskd actual
-
-Actualmente Tower usa aproximadamente:
-
-```text
-/mnt/ssd_system/appdata/slskd       → /app
-/mnt/user/data/media/music/incoming → /app/downloads
-/mnt/user/data/media/music/albums   → /app/uploads
-```
-
-Antes de migrar:
-
-1. detener `slskd`;
-2. copiar `/app` completo;
-3. conservar configuración y base de datos;
-4. adaptar los mounts al nuevo esquema MOS;
-5. comprobar permisos;
-6. iniciar slskd;
-7. verificar Web UI;
-8. comprobar login Soulseek;
-9. comprobar puerto 50300;
-10. probar una descarga.
-
-No borrar el appdata antiguo hasta terminar las pruebas.
-
-## 8. SoulSync actual
-
-La instalación actual de Unraid tiene una mezcla de bind mounts y volúmenes Docker anónimos.
-
-Bindings importantes:
-
-```text
-.../soulsync/config.json → /app/config/config.json
-.../soulsync/logs        → /app/logs
-.../soulsync/database    → /app/data
-music/albums             → /host/music
-music/playlists          → /host/playlist
-music/incoming           → /downloads
-```
-
-Además existen volúmenes Docker anónimos para:
+Inspect the existing container and identify anything mounted at locations such
+as:
 
 ```text
 /app/config
+/app/data
+/app/logs
 /app/downloads
 /app/Transfer
 /app/MusicVideos
+/app/Staging
 /app/scripts
 ```
 
-### IMPORTANTE
+Only after the contents have been inspected should an old volume be considered
+disposable.
 
-Antes de eliminar el contenedor viejo hay que revisar esos volúmenes.
+## 3. Back up the existing state
 
-Ejemplo:
+Back up the current configuration, database, and any other persistent SoulSync
+state before migration.
 
-```bash
-docker inspect SoulSync
-```
-
-y después inspeccionar cada volumen relevante:
-
-```bash
-docker volume inspect <VOLUMEN>
-```
-
-No debemos asumir que están vacíos.
-
-Especial atención a:
+At minimum, preserve the data required for:
 
 ```text
 /app/config
+/app/data
+```
+
+Also preserve any custom scripts or other files that are actually in use.
+
+## 4. Copy persistent data to MOS
+
+Recommended destinations:
+
+```text
+/mnt/cache/appdata/soulsync/config
+/mnt/cache/appdata/soulsync/data
+/mnt/cache/appdata/soulsync/logs
+/mnt/cache/appdata/soulsync/staging
+```
+
+Make sure the migrated files are accessible to the UID/GID configured in the
+MOS template.
+
+## 5. Keep internal paths stable during the first migration
+
+Avoid changing several things at once.
+
+For the first MOS startup, preserve the important container-side paths whenever
+possible:
+
+```text
+/app/downloads
 /app/Transfer
-/app/MusicVideos
+/app/config
+/app/data
 ```
 
-## 9. Migración de config.json al nuevo esquema
+Once the migrated installation is confirmed working, host paths can be cleaned
+up separately if desired.
 
-La instalación antigua monta directamente:
+## 6. Validate the shared download path
+
+Before running any automation, verify that a test file created in the shared
+host directory appears in both containers.
+
+For example:
 
 ```text
-config.json → /app/config/config.json
+slskd:    /downloads
+SoulSync: /app/downloads
 ```
 
-La futura plantilla MOS montará el directorio completo:
+Both must reference the same underlying host files.
+
+## 7. Validate the final library path
+
+Confirm that SoulSync can write to:
 
 ```text
-.../soulsync/config → /app/config
+/app/Transfer
 ```
 
-Por tanto el resultado en MOS debe quedar:
+and that the resulting files are immediately visible to the media server using
+the same host library.
 
-```text
-/mnt/.../soulsync/config/
-└── config.json
-```
+## Deep Scan caution
 
-No montar de nuevo únicamente el fichero si usamos la plantilla nueva.
+Before running a Deep Scan on a migrated library, confirm that:
 
-## 10. Orden recomendado de migración
+- the SoulSync database has migrated correctly
+- `/app/Transfer` points to the expected existing music library
+- `/app/Staging` points to the intended staging directory
+- file permissions are correct
+- a backup exists
 
-```text
-1. Crear los directorios finales de música
-2. Migrar slskd
-3. Validar slskd
-4. Crear/configurar red Docker music-stack
-5. Migrar SoulSync
-6. Configurar SoulSync → slskd
-7. Validar una descarga completa
-8. Validar organización/movimiento de archivos
-9. Migrar/configurar Navidrome
-10. Validar biblioteca en Navidrome
-11. Mantener la copia Unraid hasta comprobar todo
-```
+Do not use Deep Scan as the first migration test against an important library.
 
-# Checklist de validación
+Start with normal application startup and a small controlled test.
 
-## slskd
+# Validation checklist
 
-- [ ] Web UI accesible
-- [ ] Login Soulseek correcto
-- [ ] API operativa
-- [ ] Puerto 50300 accesible
-- [ ] Descargas llegan a la carpeta compartida
-- [ ] Biblioteca compartida visible
-- [ ] Permisos correctos
+Before considering the MOS deployment complete, verify:
 
-## SoulSync
+- SoulSync Web UI opens on port `8008`
+- the existing configuration is present
+- the database is present
+- slskd is reachable from SoulSync
+- the shared download directory is visible to both containers
+- SoulSync can process a small test download
+- the organized file reaches `/app/Transfer`
+- Navidrome/Jellyfin/Plex can see the resulting file
+- OAuth integrations work if used
+- logs persist after container restart
+- configuration persists after container restart
 
-- [ ] Web UI accesible
-- [ ] Configuración conservada
-- [ ] Base de datos conservada
-- [ ] Comunicación con slskd
-- [ ] API key correcta
-- [ ] Ve las descargas de slskd
-- [ ] Organiza/mueve archivos
-- [ ] Biblioteca final correcta
-- [ ] OAuth Spotify/Tidal si se usan
+# Rollback
 
-## Navidrome
+Keep the previous SoulSync deployment and its persistent data unchanged until
+the MOS installation has passed validation.
 
-- [ ] Web UI accesible
-- [ ] Biblioteca visible
-- [ ] Escaneo correcto
-- [ ] Usuarios/configuración conservados
-- [ ] Música reproducible
+If rollback is required:
 
-# Filosofía de los templates públicos
+1. Stop the MOS SoulSync container.
+2. Do not alter the original backup.
+3. Restart the previous deployment with its original mounts and volumes.
+4. Investigate the MOS paths, permissions, or networking before trying again.
 
-En `dannker/mos-templates`:
+# Security notes
 
-- usar documentación **upstream** como referencia;
-- mantener templates sencillos;
-- no copiar rutas personales de Tower;
-- no publicar contraseñas;
-- no publicar API keys;
-- no incluir configuraciones específicas de una instalación;
-- los detalles de migración y casos especiales pertenecen a `docs/`.
+- Do not publish Soulseek, Spotify, Tidal, or other credentials in the template.
+- Keep private tokens and passwords out of GitHub.
+- Prefer a shared Docker network for container-to-container communication.
+- Expose only the ports actually required.
+- Avoid unnecessarily exposing the Web UI to the public Internet.
+- Back up `/app/config` and `/app/data`.
 
-El template debe servir para instalar la aplicación.
+# Upstream resources
 
-La documentación debe explicar cómo migrarla y conectarla con el resto del stack.
+- SoulSync: https://github.com/Nezreka/SoulSync
+- SoulSync issues: https://github.com/Nezreka/SoulSync/issues
+- slskd: https://github.com/slskd/slskd
