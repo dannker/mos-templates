@@ -2,7 +2,7 @@
   "name": "AdGuardHome-Sync",
   "repo": "ghcr.io/bakito/adguardhome-sync:latest",
   "category": [
-    "network"
+    "Network"
   ],
   "registry": "https://github.com/bakito/adguardhome-sync/pkgs/container/adguardhome-sync",
   "network": "bridge",
@@ -13,8 +13,8 @@
   "post_parameters": "run",
   "cpu_set": null,
   "web_ui_url": "http://[IP]:[PORT:8080]/",
-  "readme_url": "https://github.com/bakito/adguardhome-sync/blob/main/README.md",
-  "icon": "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/adguard-home-sync.png",
+  "readme_url": "https://github.com/dannker/mos-templates/blob/main/docs/adguardhome-sync.md",
+  "icon": "https://raw.githubusercontent.com/dannker/mos-templates/main/images/AdGuardHome-Sync.png",
   "project": "https://github.com/bakito/adguardhome-sync",
   "support": "https://github.com/bakito/adguardhome-sync/issues",
   "description": "Synchronize AdGuard Home configuration from one origin instance to one or more replica instances.",
