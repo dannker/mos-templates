@@ -1,0 +1,80 @@
+{
+  "name": "OpenClaw",
+  "repo": "ghcr.io/openclaw/openclaw:latest",
+  "category": [
+    "ai",
+    "productivity"
+  ],
+  "registry": "https://github.com/openclaw/openclaw/pkgs/container/openclaw",
+  "network": "bridge",
+  "custom_ip": null,
+  "default_shell": "sh",
+  "privileged": false,
+  "extra_parameters": "--restart=unless-stopped --cap-drop=NET_RAW --cap-drop=NET_ADMIN --security-opt=no-new-privileges:true --add-host=host.docker.internal:host-gateway",
+  "post_parameters": "node openclaw.mjs gateway --bind lan --port 18789",
+  "cpu_set": null,
+  "web_ui_url": "http://[IP]:[PORT:18789]/",
+  "readme_url": "https://github.com/openclaw/openclaw/blob/main/docs/install/docker.md",
+  "icon": "https://raw.githubusercontent.com/selfhosters/unRAID-CA-templates/master/templates/img/openclaw.png",
+  "project": "https://github.com/openclaw/openclaw",
+  "support": "https://github.com/openclaw/openclaw/issues",
+  "description": "OpenClaw is an AI assistant gateway with persistent memory, tools, skills, automation and integrations with messaging platforms.",
+  "paths": [
+    {
+      "name": "State",
+      "host": "/mnt/cache/appdata/openclaw/state",
+      "container": "/home/node/.openclaw",
+      "mode": "rw",
+      "description": "Persistent OpenClaw configuration, sessions, memory, skills and workspace."
+    },
+    {
+      "name": "Auth Profile Secrets",
+      "host": "/mnt/cache/appdata/openclaw/auth",
+      "container": "/home/node/.config/openclaw",
+      "mode": "rw",
+      "description": "Persistent authentication profile secrets."
+    }
+  ],
+  "ports": [
+    {
+      "name": "Gateway / Control UI",
+      "protocol": "tcp",
+      "host": "18789",
+      "container": "18789",
+      "description": "OpenClaw Gateway API and Control UI."
+    }
+  ],
+  "variables": [
+    {
+      "name": "Gateway Token",
+      "key": "OPENCLAW_GATEWAY_TOKEN",
+      "value": "",
+      "mask": true,
+      "description": "Secret token used to authenticate access to the OpenClaw Gateway."
+    },
+    {
+      "name": "OpenAI API Key",
+      "key": "OPENAI_API_KEY",
+      "value": "",
+      "mask": true,
+      "description": "Optional OpenAI API key."
+    },
+    {
+      "name": "Anthropic API Key",
+      "key": "ANTHROPIC_API_KEY",
+      "value": "",
+      "mask": true,
+      "description": "Optional Anthropic API key."
+    },
+    {
+      "name": "OpenRouter API Key",
+      "key": "OPENROUTER_API_KEY",
+      "value": "",
+      "mask": true,
+      "description": "Optional OpenRouter API key."
+    }
+  ],
+  "devices": [],
+  "labels": [],
+  "gpus": []
+}
