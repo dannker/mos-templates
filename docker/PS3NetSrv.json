@@ -2,8 +2,7 @@
   "name": "PS3NetSrv",
   "repo": "shawly/ps3netsrv:latest",
   "category": [
-    "network",
-    "other"
+    "Game Server"
   ],
   "registry": "https://hub.docker.com/r/shawly/ps3netsrv",
   "network": "bridge",
@@ -15,7 +14,7 @@
   "cpu_set": null,
   "web_ui_url": null,
   "readme_url": "https://github.com/shawly/docker-ps3netsrv",
-  "icon": "https://raw.githubusercontent.com/shawly/docker-ps3netsrv/main/ps3netsrv-icon.png",
+  "icon": "https://raw.githubusercontent.com/dannker/mos-templates/main/images/PS3NetSrv.png",
   "project": "https://github.com/aldostools/ps3netsrv",
   "support": "https://github.com/shawly/docker-ps3netsrv/issues",
   "description": "PS3NetSrv streams PlayStation 3 game backups from a server to webMAN MOD or multiMAN over the network.",
@@ -41,16 +40,16 @@
     {
       "name": "User ID",
       "key": "USER_ID",
-      "value": "1000",
+      "value": "500",
       "mask": false,
-      "description": "UID used by the ps3netsrv process to access the games directory."
+      "description": "UID used by the ps3netsrv process to access the games directory. MOS recommended default: 500."
     },
     {
       "name": "Group ID",
       "key": "GROUP_ID",
-      "value": "1000",
+      "value": "500",
       "mask": false,
-      "description": "GID used by the ps3netsrv process to access the games directory."
+      "description": "GID used by the ps3netsrv process to access the games directory. MOS recommended default: 500."
     }
   ],
   "devices": [],
