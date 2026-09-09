@@ -2,8 +2,7 @@
   "name": "Immich-Kiosk",
   "repo": "ghcr.io/damongolding/immich-kiosk:latest",
   "category": [
-    "media",
-    "photos"
+    "Media"
   ],
   "registry": "https://github.com/damongolding/immich-kiosk/pkgs/container/immich-kiosk",
   "network": "bridge",
@@ -14,8 +13,8 @@
   "post_parameters": null,
   "cpu_set": null,
   "web_ui_url": "http://[IP]:[PORT:3000]/",
-  "readme_url": "https://docs.immichkiosk.app/",
-  "icon": "https://raw.githubusercontent.com/nwithan8/unraid_templates/master/images/immich-kiosk-icon.png",
+  "readme_url": "https://github.com/dannker/mos-templates/blob/main/docs/immich-kiosk.md",
+  "icon": "https://raw.githubusercontent.com/dannker/mos-templates/main/images/Immich-Kiosk.png",
   "project": "https://github.com/damongolding/immich-kiosk",
   "support": "https://github.com/damongolding/immich-kiosk/issues",
   "description": "A configurable web slideshow and digital photo frame for Immich.",
