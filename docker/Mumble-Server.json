@@ -2,8 +2,7 @@
   "name": "Mumble Server",
   "repo": "mumblevoip/mumble-server:latest",
   "category": [
-    "network",
-    "voip"
+    "Network"
   ],
   "registry": "https://hub.docker.com/r/mumblevoip/mumble-server",
   "network": "bridge",
@@ -14,8 +13,8 @@
   "post_parameters": null,
   "cpu_set": null,
   "web_ui_url": null,
-  "readme_url": "https://github.com/mumble-voip/mumble-docker",
-  "icon": "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/mumble.png",
+  "readme_url": "https://github.com/dannker/mos-templates/blob/main/docs/mumble-server.md",
+  "icon": "https://raw.githubusercontent.com/dannker/mos-templates/main/images/Mumble-Server.png",
   "project": "https://www.mumble.info/",
   "support": "https://github.com/mumble-voip/mumble-docker/issues",
   "description": "Official Mumble low-latency, high-quality voice chat server.",
@@ -48,16 +47,16 @@
     {
       "name": "User ID",
       "key": "PUID",
-      "value": "10000",
+      "value": "500",
       "mask": false,
-      "description": "UID used by the Mumble server process."
+      "description": "UID used by the Mumble server process. MOS recommended default: 500."
     },
     {
       "name": "Group ID",
       "key": "PGID",
-      "value": "10000",
+      "value": "500",
       "mask": false,
-      "description": "GID used by the Mumble server process."
+      "description": "GID used by the Mumble server process. MOS recommended default: 500."
     },
     {
       "name": "SuperUser Password",
