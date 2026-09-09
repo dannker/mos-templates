@@ -1,0 +1,129 @@
+{
+  "name": "Paperless-ngx",
+  "repo": "ghcr.io/paperless-ngx/paperless-ngx:latest",
+  "category": [
+    "productivity",
+    "documents"
+  ],
+  "registry": "https://github.com/paperless-ngx/paperless-ngx/pkgs/container/paperless-ngx",
+  "network": "bridge",
+  "custom_ip": null,
+  "default_shell": "bash",
+  "privileged": false,
+  "extra_parameters": "--restart=unless-stopped",
+  "post_parameters": null,
+  "cpu_set": null,
+  "web_ui_url": "http://[IP]:[PORT:8000]/",
+  "readme_url": "https://docs.paperless-ngx.com/",
+  "icon": "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/paperless-ngx.png",
+  "project": "https://github.com/paperless-ngx/paperless-ngx",
+  "support": "https://github.com/paperless-ngx/paperless-ngx/issues",
+  "description": "Paperless-ngx is a document management system that transforms physical and digital documents into a searchable archive.",
+  "paths": [
+    {
+      "name": "Data",
+      "host": "/mnt/cache/appdata/paperless-ngx/data",
+      "container": "/usr/src/paperless/data",
+      "mode": "rw",
+      "description": "Persistent Paperless database, search index and application data."
+    },
+    {
+      "name": "Media",
+      "host": "/mnt/user/paperless/media",
+      "container": "/usr/src/paperless/media",
+      "mode": "rw",
+      "description": "Original and archived documents managed by Paperless."
+    },
+    {
+      "name": "Consume",
+      "host": "/mnt/user/paperless/consume",
+      "container": "/usr/src/paperless/consume",
+      "mode": "rw",
+      "description": "Drop documents here for automatic consumption."
+    },
+    {
+      "name": "Export",
+      "host": "/mnt/user/paperless/export",
+      "container": "/usr/src/paperless/export",
+      "mode": "rw",
+      "description": "Destination used by the Paperless document exporter."
+    }
+  ],
+  "ports": [
+    {
+      "name": "Web UI",
+      "protocol": "tcp",
+      "host": "8000",
+      "container": "8000",
+      "description": "Paperless-ngx web interface."
+    }
+  ],
+  "variables": [
+    {
+      "name": "Valkey / Redis URL",
+      "key": "PAPERLESS_REDIS",
+      "value": "",
+      "mask": true,
+      "description": "Required Redis-compatible broker URL, for example redis://valkey:6379 or a password-protected Valkey URL."
+    },
+    {
+      "name": "Secret Key",
+      "key": "PAPERLESS_SECRET_KEY",
+      "value": "",
+      "mask": true,
+      "description": "Required secret used to sign sessions and sensitive application data. Use a long random value."
+    },
+    {
+      "name": "OCR Language",
+      "key": "PAPERLESS_OCR_LANGUAGE",
+      "value": "eng",
+      "mask": false,
+      "description": "Primary OCR language. Multiple languages can be combined, for example spa+eng."
+    },
+    {
+      "name": "Additional OCR Languages",
+      "key": "PAPERLESS_OCR_LANGUAGES",
+      "value": "",
+      "mask": false,
+      "description": "Optional additional Tesseract language packages to install."
+    },
+    {
+      "name": "Time Zone",
+      "key": "PAPERLESS_TIME_ZONE",
+      "value": "Europe/Madrid",
+      "mask": false,
+      "description": "Timezone used by Paperless."
+    },
+    {
+      "name": "Public URL",
+      "key": "PAPERLESS_URL",
+      "value": "",
+      "mask": false,
+      "description": "Optional canonical external URL, for example https://paperless.example.com."
+    },
+    {
+      "name": "Filename Format",
+      "key": "PAPERLESS_FILENAME_FORMAT",
+      "value": "",
+      "mask": false,
+      "description": "Optional template used to generate document filenames."
+    },
+    {
+      "name": "User ID",
+      "key": "USERMAP_UID",
+      "value": "1000",
+      "mask": false,
+      "description": "Host UID used by Paperless for mounted files and directories."
+    },
+    {
+      "name": "Group ID",
+      "key": "USERMAP_GID",
+      "value": "1000",
+      "mask": false,
+      "description": "Host GID used by Paperless for mounted files and directories."
+    }
+  ],
+  "devices": [],
+  "labels": [],
+  "gpus": []
+}
