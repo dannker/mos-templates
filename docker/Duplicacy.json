@@ -13,7 +13,7 @@
   "post_parameters": null,
   "cpu_set": null,
   "web_ui_url": "http://[IP]:[PORT:3875]/",
-  "readme_url": "https://hub.docker.com/r/saspus/duplicacy-web",
+  "readme_url": "https://github.com/dannker/mos-templates/blob/main/docs/duplicacy-migration.md",
   "icon": "https://raw.githubusercontent.com/dannker/mos-templates/main/images/Duplicacy.png",
   "project": "https://duplicacy.com/",
   "support": "https://forum.duplicacy.com/",
