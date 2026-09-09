@@ -2,8 +2,7 @@
   "name": "Paperless-ngx",
   "repo": "ghcr.io/paperless-ngx/paperless-ngx:latest",
   "category": [
-    "productivity",
-    "documents"
+    "Productivity"
   ],
   "registry": "https://github.com/paperless-ngx/paperless-ngx/pkgs/container/paperless-ngx",
   "network": "bridge",
@@ -14,8 +13,8 @@
   "post_parameters": null,
   "cpu_set": null,
   "web_ui_url": "http://[IP]:[PORT:8000]/",
-  "readme_url": "https://docs.paperless-ngx.com/",
-  "icon": "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/paperless-ngx.png",
+  "readme_url": "https://github.com/dannker/mos-templates/blob/main/docs/paperless-ngx.md",
+  "icon": "https://raw.githubusercontent.com/dannker/mos-templates/main/images/Paperless-ngx.png",
   "project": "https://github.com/paperless-ngx/paperless-ngx",
   "support": "https://github.com/paperless-ngx/paperless-ngx/issues",
   "description": "Paperless-ngx is a document management system that transforms physical and digital documents into a searchable archive.",
@@ -25,14 +24,14 @@
       "host": "/mnt/cache/appdata/paperless-ngx/data",
       "container": "/usr/src/paperless/data",
       "mode": "rw",
-      "description": "Persistent Paperless database, search index and application data."
+      "description": "Persistent Paperless application data, search index and SQLite database when SQLite is used."
     },
     {
       "name": "Media",
       "host": "/mnt/user/paperless/media",
       "container": "/usr/src/paperless/media",
       "mode": "rw",
-      "description": "Original and archived documents managed by Paperless."
+      "description": "Original documents, archive files and thumbnails managed by Paperless."
     },
     {
       "name": "Consume",
@@ -64,14 +63,21 @@
       "key": "PAPERLESS_REDIS",
       "value": "",
       "mask": true,
-      "description": "Required Redis-compatible broker URL, for example redis://valkey:6379 or a password-protected Valkey URL."
+      "description": "Required Redis-compatible broker URL. Example: redis://:password@valkey-paperless:6379."
     },
     {
       "name": "Secret Key",
       "key": "PAPERLESS_SECRET_KEY",
       "value": "",
       "mask": true,
-      "description": "Required secret used to sign sessions and sensitive application data. Use a long random value."
+      "description": "Required secret used for sessions and cryptographic signing. Generate a long random value before first startup."
+    },
+    {
+      "name": "Database Engine",
+      "key": "PAPERLESS_DBENGINE",
+      "value": "sqlite",
+      "mask": false,
+      "description": "Database backend. This single-container template defaults to SQLite."
     },
     {
       "name": "OCR Language",
@@ -85,14 +91,14 @@
       "key": "PAPERLESS_OCR_LANGUAGES",
       "value": "",
       "mask": false,
-      "description": "Optional additional Tesseract language packages to install."
+      "description": "Optional additional Tesseract language packages to install, as a space-separated list."
     },
     {
       "name": "Time Zone",
       "key": "PAPERLESS_TIME_ZONE",
-      "value": "Europe/Madrid",
+      "value": "UTC",
       "mask": false,
-      "description": "Timezone used by Paperless."
+      "description": "Timezone used by Paperless. Change this to your local timezone if required."
     },
     {
       "name": "Public URL",
@@ -111,16 +117,16 @@
     {
       "name": "User ID",
       "key": "USERMAP_UID",
-      "value": "1000",
+      "value": "500",
       "mask": false,
-      "description": "Host UID used by Paperless for mounted files and directories."
+      "description": "Host UID used by Paperless for mounted files and directories. MOS recommended default: 500."
     },
     {
       "name": "Group ID",
       "key": "USERMAP_GID",
-      "value": "1000",
+      "value": "500",
       "mask": false,
-      "description": "Host GID used by Paperless for mounted files and directories."
+      "description": "Host GID used by Paperless for mounted files and directories. MOS recommended default: 500."
     }
   ],
   "devices": [],
