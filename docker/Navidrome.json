@@ -1,0 +1,87 @@
+{
+  "name": "Navidrome",
+  "repo": "deluan/navidrome:latest",
+  "category": [
+    "media",
+    "music"
+  ],
+  "registry": "https://hub.docker.com/r/deluan/navidrome",
+  "network": "bridge",
+  "custom_ip": null,
+  "default_shell": "sh",
+  "privileged": false,
+  "extra_parameters": "--restart=unless-stopped",
+  "post_parameters": null,
+  "cpu_set": null,
+  "web_ui_url": "http://[IP]:[PORT:4533]/",
+  "readme_url": "https://www.navidrome.org/docs/installation/docker/",
+  "icon": "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/navidrome.png",
+  "project": "https://www.navidrome.org/",
+  "support": "https://github.com/navidrome/navidrome/issues",
+  "description": "Navidrome is a modern open source music server and streamer compatible with Subsonic clients.",
+  "paths": [
+    {
+      "name": "AppData",
+      "host": "/mnt/cache/appdata/navidrome",
+      "container": "/data",
+      "mode": "rw",
+      "description": "Navidrome database, configuration and cache."
+    },
+    {
+      "name": "Music",
+      "host": "/mnt/user/music",
+      "container": "/music",
+      "mode": "ro",
+      "description": "Music library."
+    }
+  ],
+  "ports": [
+    {
+      "name": "Web UI",
+      "protocol": "tcp",
+      "host": "4533",
+      "container": "4533",
+      "description": "Navidrome web interface and Subsonic API."
+    }
+  ],
+  "variables": [
+    {
+      "name": "Log Level",
+      "key": "ND_LOGLEVEL",
+      "value": "info",
+      "mask": false,
+      "description": "Logging level: error, warn, info, debug or trace."
+    },
+    {
+      "name": "Scan Schedule",
+      "key": "ND_SCANNER_SCHEDULE",
+      "value": "0",
+      "mask": false,
+      "description": "Automatic music library scan schedule. 0 disables scheduled scans."
+    },
+    {
+      "name": "Session Timeout",
+      "key": "ND_SESSIONTIMEOUT",
+      "value": "48h",
+      "mask": false,
+      "description": "Web UI session timeout."
+    },
+    {
+      "name": "Base URL",
+      "key": "ND_BASEURL",
+      "value": "",
+      "mask": false,
+      "description": "Optional base URL when serving Navidrome from a subpath or external URL."
+    },
+    {
+      "name": "Image Cache Size",
+      "key": "ND_IMAGECACHESIZE",
+      "value": "100MB",
+      "mask": false,
+      "description": "Maximum size of the artwork image cache."
+    }
+  ],
+  "devices": [],
+  "labels": [],
+  "gpus": []
+}
