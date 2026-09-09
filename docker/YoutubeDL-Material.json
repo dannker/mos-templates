@@ -2,10 +2,8 @@
   "name": "YoutubeDL-Material",
   "repo": "tzahi12345/youtubedl-material:latest",
   "category": [
-    "downloaders",
-    "media",
-    "video",
-    "music"
+    "Downloader",
+    "Media"
   ],
   "registry": "https://hub.docker.com/r/tzahi12345/youtubedl-material",
   "network": "bridge",
@@ -17,7 +15,7 @@
   "cpu_set": null,
   "web_ui_url": "http://[IP]:[PORT:17442]/",
   "readme_url": "https://github.com/Tzahi12345/YoutubeDL-Material",
-  "icon": "https://raw.githubusercontent.com/selfhosters/unRAID-CA-templates/master/templates/img/youtubedl-material.png",
+  "icon": "https://raw.githubusercontent.com/dannker/mos-templates/main/images/YoutubeDL-Material.png",
   "project": "https://github.com/Tzahi12345/YoutubeDL-Material",
   "support": "https://github.com/Tzahi12345/YoutubeDL-Material/issues",
   "description": "Self-hosted YouTube and media downloader with a modern Material Design web interface.",
@@ -73,14 +71,14 @@
       "key": "UID",
       "value": "1000",
       "mask": false,
-      "description": "User ID used by YoutubeDL-Material."
+      "description": "User ID used by YoutubeDL-Material. Upstream default: 1000."
     },
     {
       "name": "Group ID",
       "key": "GID",
       "value": "1000",
       "mask": false,
-      "description": "Group ID used by YoutubeDL-Material."
+      "description": "Group ID used by YoutubeDL-Material. Upstream default: 1000."
     },
     {
       "name": "Allow Config Mutations",
@@ -94,7 +92,7 @@
       "key": "ytdl_use_local_db",
       "value": "true",
       "mask": false,
-      "description": "Use the built-in local JSON database instead of MongoDB."
+      "description": "Use the built-in local database instead of MongoDB."
     },
     {
       "name": "Advanced Downloads",
