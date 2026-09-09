@@ -1,0 +1,109 @@
+{
+  "name": "slskd",
+  "repo": "slskd/slskd:latest",
+  "category": [
+    "downloaders",
+    "media",
+    "music"
+  ],
+  "registry": "https://hub.docker.com/r/slskd/slskd",
+  "network": "bridge",
+  "custom_ip": null,
+  "default_shell": "sh",
+  "privileged": false,
+  "extra_parameters": "--restart=unless-stopped",
+  "post_parameters": null,
+  "cpu_set": null,
+  "web_ui_url": "http://[IP]:[PORT:5030]/",
+  "readme_url": "https://github.com/slskd/slskd/blob/master/docs/docker.md",
+  "icon": "https://raw.githubusercontent.com/manuel-rw/unraid-templates/master/templates/slskd/logo.png",
+  "project": "https://github.com/slskd/slskd",
+  "support": "https://github.com/slskd/slskd/issues",
+  "description": "A modern client-server application for the Soulseek file-sharing network with a web interface and reverse proxy support.",
+  "paths": [
+    {
+      "name": "AppData",
+      "host": "/mnt/cache/appdata/slskd",
+      "container": "/app",
+      "mode": "rw",
+      "description": "Persistent slskd configuration, database and application data."
+    },
+    {
+      "name": "Downloads",
+      "host": "/mnt/user/downloads/slskd",
+      "container": "/downloads",
+      "mode": "rw",
+      "description": "Completed Soulseek downloads."
+    },
+    {
+      "name": "Shared Music",
+      "host": "/mnt/user/music",
+      "container": "/music",
+      "mode": "ro",
+      "description": "Music directory shared through Soulseek."
+    }
+  ],
+  "ports": [
+    {
+      "name": "HTTP Web UI",
+      "protocol": "tcp",
+      "host": "5030",
+      "container": "5030",
+      "description": "slskd HTTP web interface."
+    },
+    {
+      "name": "HTTPS Web UI",
+      "protocol": "tcp",
+      "host": "5031",
+      "container": "5031",
+      "description": "slskd HTTPS web interface using its self-signed certificate."
+    },
+    {
+      "name": "Soulseek",
+      "protocol": "tcp",
+      "host": "50300",
+      "container": "50300",
+      "description": "Incoming Soulseek peer connections."
+    }
+  ],
+  "variables": [
+    {
+      "name": "User ID",
+      "key": "PUID",
+      "value": "1000",
+      "mask": false,
+      "description": "User ID used to run slskd."
+    },
+    {
+      "name": "Group ID",
+      "key": "PGID",
+      "value": "1000",
+      "mask": false,
+      "description": "Group ID used to run slskd."
+    },
+    {
+      "name": "Remote Configuration",
+      "key": "SLSKD_REMOTE_CONFIGURATION",
+      "value": "true",
+      "mask": false,
+      "description": "Allows configuration changes from the web interface. Disable when exposing slskd directly to the Internet."
+    },
+    {
+      "name": "Downloads Directory",
+      "key": "SLSKD_DOWNLOADS_DIR",
+      "value": "/downloads",
+      "mask": false,
+      "description": "Directory where completed downloads are stored."
+    },
+    {
+      "name": "Shared Directory",
+      "key": "SLSKD_SHARED_DIR",
+      "value": "[Music]/music",
+      "mask": false,
+      "description": "Directory shared through Soulseek. Multiple paths can be separated with semicolons."
+    }
+  ],
+  "devices": [],
+  "labels": [],
+  "gpus": []
+}
