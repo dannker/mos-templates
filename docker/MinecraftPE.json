@@ -1,9 +1,8 @@
 {
-  "name": "MinecraftPE",
+  "name": "Nukkit",
   "repo": "ixilon/nukkit:latest",
   "category": [
-    "games",
-    "server"
+    "Game Server"
   ],
   "registry": "https://hub.docker.com/r/ixilon/nukkit",
   "network": "bridge",
@@ -15,14 +14,14 @@
   "cpu_set": null,
   "web_ui_url": null,
   "readme_url": "https://hub.docker.com/r/ixilon/nukkit",
-  "icon": "http://i.imgur.com/zn0eOhH.png",
+  "icon": "https://raw.githubusercontent.com/dannker/mos-templates/main/images/Nukkit.png",
   "project": "https://github.com/CloudburstMC/Nukkit",
-  "support": "https://github.com/CloudburstMC/Nukkit/issues",
+  "support": "https://gitlab.com/ixilon/nukkit-docker/-/issues",
   "description": "Nukkit is a Java-based Minecraft Bedrock Edition server with plugin support.",
   "paths": [
     {
       "name": "Server Data",
-      "host": "/mnt/cache/appdata/minecraftpe",
+      "host": "/mnt/cache/appdata/nukkit",
       "container": "/srv/nukkit",
       "mode": "rw",
       "description": "Persistent Nukkit configuration, worlds and plugins."
