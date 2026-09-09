@@ -17,14 +17,14 @@
   "icon": "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/heimdall.png",
   "project": "https://heimdall.site/",
   "support": "https://github.com/linuxserver/docker-heimdall/issues",
-  "description": "Heimdall is an application dashboard for organising links to your most used websites and web applications. Existing installations can be migrated by copying the complete /config directory and matching the original file ownership with PUID and PGID.",
+  "description": "Heimdall is an application dashboard for organising links to your most used websites and web applications.",
   "paths": [
     {
       "name": "Config",
       "host": "/mnt/cache/appdata/heimdall",
       "container": "/config",
       "mode": "rw",
-      "description": "Persistent Heimdall configuration and application data. When migrating an existing installation, copy the complete contents of the original /config volume here while both containers are stopped."
+      "description": "Persistent Heimdall configuration and application data."
     }
   ],
   "ports": [
@@ -33,14 +33,14 @@
       "protocol": "tcp",
       "host": "80",
       "container": "80",
-      "description": "Heimdall HTTP web interface. Change the host port if port 80 is already used by MOS or another service."
+      "description": "Heimdall HTTP web interface."
     },
     {
       "name": "HTTPS Web UI",
       "protocol": "tcp",
       "host": "443",
       "container": "443",
-      "description": "Heimdall HTTPS web interface. Change the host port if port 443 is already used by MOS or another service."
+      "description": "Heimdall HTTPS web interface."
     }
   ],
   "variables": [
@@ -49,21 +49,21 @@
       "key": "PUID",
       "value": "1000",
       "mask": false,
-      "description": "User ID used by the container for files under /config. When migrating existing AppData, set this to the numeric UID that owns the existing files. For example, Unraid commonly uses PUID 99."
+      "description": "User ID used by the container for file permissions."
     },
     {
       "name": "PGID",
       "key": "PGID",
       "value": "1000",
       "mask": false,
-      "description": "Group ID used by the container for files under /config. When migrating existing AppData, set this to the numeric GID that owns the existing files. For example, Unraid commonly uses PGID 100."
+      "description": "Group ID used by the container for file permissions."
     },
     {
       "name": "Allow Internal Requests",
       "key": "ALLOW_INTERNAL_REQUESTS",
       "value": "false",
       "mask": false,
-      "description": "Allow Heimdall to make requests to private or reserved IP addresses. Enable only if Enhanced Apps need to query services on your LAN. Enabling this increases exposure to SSRF-style requests, so leave false unless required."
+      "description": "Allow Heimdall to make requests to private or reserved IP addresses."
     }
   ],
   "devices": [],
