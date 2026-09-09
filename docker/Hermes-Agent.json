@@ -13,7 +13,7 @@
   "post_parameters": "gateway run",
   "cpu_set": null,
   "web_ui_url": "http://[IP]:[PORT:9119]/",
-  "readme_url": "https://hermes-agent.nousresearch.com/docs/user-guide/docker/",
+  "readme_url": "https://github.com/dannker/mos-templates/blob/main/docs/hermes-agent.md"
   "icon": "https://raw.githubusercontent.com/dannker/mos-templates/main/images/Hermes-Agent.png",
   "project": "https://hermes-agent.nousresearch.com/",
   "support": "https://github.com/NousResearch/hermes-agent/issues",
