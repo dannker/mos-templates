@@ -2,7 +2,7 @@
   "name": "Duplicacy",
   "repo": "saspus/duplicacy-web:mini",
   "category": [
-    "backup"
+    "Backup"
   ],
   "registry": "https://hub.docker.com/r/saspus/duplicacy-web",
   "network": "bridge",
@@ -14,7 +14,7 @@
   "cpu_set": null,
   "web_ui_url": "http://[IP]:[PORT:3875]/",
   "readme_url": "https://hub.docker.com/r/saspus/duplicacy-web",
-  "icon": "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/duplicacy.png",
+  "icon": "https://raw.githubusercontent.com/dannker/mos-templates/main/images/Duplicacy.png",
   "project": "https://duplicacy.com/",
   "support": "https://forum.duplicacy.com/",
   "description": "Duplicacy Web provides a web interface for Duplicacy backups with client-side encryption and global deduplication.",
@@ -24,7 +24,7 @@
       "host": "/mnt/cache/appdata/duplicacy",
       "container": "/config",
       "mode": "rw",
-      "description": "Persistent Duplicacy configuration and machine ID."
+      "description": "Persistent Duplicacy configuration and machine ID. Back up this directory."
     },
     {
       "name": "Cache",
@@ -54,16 +54,16 @@
     {
       "name": "User ID",
       "key": "USR_ID",
-      "value": "1000",
+      "value": "500",
       "mask": false,
-      "description": "User ID used to run Duplicacy."
+      "description": "User ID used to run Duplicacy. MOS recommended default: 500."
     },
     {
       "name": "Group ID",
       "key": "GRP_ID",
-      "value": "1000",
+      "value": "500",
       "mask": false,
-      "description": "Group ID used to run Duplicacy."
+      "description": "Group ID used to run Duplicacy. MOS recommended default: 500."
     },
     {
       "name": "Duplicacy Web Version",
