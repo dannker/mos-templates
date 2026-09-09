@@ -2,7 +2,7 @@
   "name": "Heimdall",
   "repo": "lscr.io/linuxserver/heimdall:latest",
   "category": [
-    "dashboard"
+    "Utilities"
   ],
   "registry": "https://github.com/linuxserver/docker-heimdall/pkgs/container/heimdall",
   "network": "bridge",
@@ -14,7 +14,7 @@
   "cpu_set": null,
   "web_ui_url": "http://[IP]:[PORT:80]/",
   "readme_url": "https://docs.linuxserver.io/images/docker-heimdall/",
-  "icon": "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/heimdall.png",
+  "icon": "https://raw.githubusercontent.com/dannker/mos-templates/main/images/Heimdall.png",
   "project": "https://heimdall.site/",
   "support": "https://github.com/linuxserver/docker-heimdall/issues",
   "description": "Heimdall is an application dashboard for organising links to your most used websites and web applications.",
@@ -31,14 +31,14 @@
     {
       "name": "HTTP Web UI",
       "protocol": "tcp",
-      "host": "80",
+      "host": "8082",
       "container": "80",
-      "description": "Heimdall HTTP web interface."
+      "description": "Heimdall HTTP web interface. Uses port 8082 by default to avoid conflict with the MOS WebUI."
     },
     {
       "name": "HTTPS Web UI",
       "protocol": "tcp",
-      "host": "443",
+      "host": "8443",
       "container": "443",
       "description": "Heimdall HTTPS web interface."
     }
@@ -47,23 +47,23 @@
     {
       "name": "PUID",
       "key": "PUID",
-      "value": "1000",
+      "value": "500",
       "mask": false,
-      "description": "User ID used by the container for file permissions."
+      "description": "User ID used by the container for file permissions. MOS recommended default: 500."
     },
     {
       "name": "PGID",
       "key": "PGID",
-      "value": "1000",
+      "value": "500",
       "mask": false,
-      "description": "Group ID used by the container for file permissions."
+      "description": "Group ID used by the container for file permissions. MOS recommended default: 500."
     },
     {
       "name": "Allow Internal Requests",
       "key": "ALLOW_INTERNAL_REQUESTS",
       "value": "false",
       "mask": false,
-      "description": "Allow Heimdall to make requests to private or reserved IP addresses."
+      "description": "Allow Heimdall to make requests to private or reserved IP addresses. Enable only when required."
     }
   ],
   "devices": [],
