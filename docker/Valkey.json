@@ -2,20 +2,19 @@
   "name": "Valkey",
   "repo": "valkey/valkey:8.0-alpine",
   "category": [
-    "database",
-    "tools"
+    "System"
   ],
   "registry": "https://hub.docker.com/r/valkey/valkey",
   "network": "bridge",
   "custom_ip": null,
   "default_shell": "sh",
   "privileged": false,
-  "extra_parameters": "--restart=unless-stopped",
+  "extra_parameters": "--restart=unless-stopped --user=500:500",
   "post_parameters": "sh -c 'exec valkey-server --appendonly \"$VALKEY_APPENDONLY\" --requirepass \"$VALKEY_PASSWORD\" --maxmemory \"$VALKEY_MAXMEMORY\" --maxmemory-policy \"$VALKEY_MAXMEMORY_POLICY\"'",
   "cpu_set": null,
   "web_ui_url": null,
-  "readme_url": "https://hub.docker.com/r/valkey/valkey",
-  "icon": "https://raw.githubusercontent.com/SnuK87/unraid-templates/refs/heads/main/icons/valkey-logo.png",
+  "readme_url": "https://github.com/dannker/mos-templates/blob/main/docs/valkey.md",
+  "icon": "https://raw.githubusercontent.com/dannker/mos-templates/main/images/Valkey.png",
   "project": "https://valkey.io/",
   "support": "https://github.com/valkey-io/valkey/issues",
   "description": "Valkey is an open-source high-performance key/value datastore for caching, queues and application data.",
@@ -25,32 +24,24 @@
       "host": "/mnt/cache/appdata/valkey",
       "container": "/data",
       "mode": "rw",
-      "description": "Persistent Valkey data."
+      "description": "Persistent Valkey data. Must be writable by UID/GID 500:500."
     }
   ],
-  "ports": [
-    {
-      "name": "Valkey",
-      "protocol": "tcp",
-      "host": "6379",
-      "container": "6379",
-      "description": "Valkey client connection port."
-    }
-  ],
+  "ports": [],
   "variables": [
     {
       "name": "Password",
       "key": "VALKEY_PASSWORD",
       "value": "",
       "mask": true,
-      "description": "Password required by clients connecting to Valkey."
+      "description": "Password required by clients connecting to Valkey. A strong password is recommended."
     },
     {
       "name": "Maximum Memory",
       "key": "VALKEY_MAXMEMORY",
       "value": "2gb",
       "mask": false,
-      "description": "Maximum amount of memory Valkey may use."
+      "description": "Maximum amount of memory Valkey may use. Adjust this value for the workload and available RAM."
     },
     {
       "name": "Memory Policy",
