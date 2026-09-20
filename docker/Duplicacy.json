@@ -17,28 +17,49 @@
   "icon": "https://raw.githubusercontent.com/dannker/mos-templates/main/images/Duplicacy.png",
   "project": "https://duplicacy.com/",
   "support": "https://forum.duplicacy.com/",
-  "description": "Duplicacy Web provides a web interface for Duplicacy backups with client-side encryption and global deduplication.",
+  "description": "Duplicacy Web using the saspus mini image. Backup sources should normally be mounted read-only, backup storage must be read/write for backup and prune operations, and restores should use a separate read/write target.",
   "paths": [
     {
       "name": "Config",
-      "host": "/mnt/cache/appdata/duplicacy",
+      "host": "/mnt/FAST/appdata/Duplicacy",
       "container": "/config",
       "mode": "rw",
-      "description": "Persistent Duplicacy configuration and machine ID. Back up this directory."
+      "description": "Persistent Duplicacy Web configuration and machine ID. Back up this directory. Change the FAST pool name if your MOS appdata is stored elsewhere."
     },
     {
       "name": "Cache",
-      "host": "/mnt/cache/appdata/duplicacy/cache",
+      "host": "/mnt/FAST/appdata/Duplicacy/cache",
       "container": "/cache",
       "mode": "rw",
-      "description": "Temporary cache data. This directory can be safely recreated."
+      "description": "Transient Duplicacy cache. This directory can be safely recreated."
     },
     {
       "name": "Logs",
-      "host": "/mnt/cache/appdata/duplicacy/logs",
+      "host": "/mnt/FAST/appdata/Duplicacy/logs",
       "container": "/logs",
       "mode": "rw",
-      "description": "Duplicacy log files."
+      "description": "Duplicacy Web log files."
+    },
+    {
+      "name": "Backup Storage - Example",
+      "host": "/mnt/remotes/REMOTE/Duplicacy",
+      "container": "/backup",
+      "mode": "rw",
+      "description": "EXAMPLE: storage containing Duplicacy snapshots and chunks. EDIT this host path before use. It must be read/write so Duplicacy can backup, check, copy and prune. For SMB/NFS storage, mount the remote on MOS first and verify that the Duplicacy UID/GID can create and delete files."
+    },
+    {
+      "name": "Backup Source - Example",
+      "host": "/mnt/PROTECTED/data",
+      "container": "/source",
+      "mode": "ro",
+      "description": "EXAMPLE INPUT: data to be backed up. Read-only is recommended and protects production data from accidental modification. Add additional source mounts as needed."
+    },
+    {
+      "name": "Restore Target - Example",
+      "host": "/mnt/PROTECTED/restore",
+      "container": "/restore",
+      "mode": "rw",
+      "description": "EXAMPLE OUTPUT: dedicated destination for restores. Must be read/write. Restoring to a separate directory is recommended so restored data can be verified before replacing production files."
     }
   ],
   "ports": [
@@ -47,7 +68,7 @@
       "protocol": "tcp",
       "host": "3875",
       "container": "3875",
-      "description": "Duplicacy Web interface."
+      "description": "Duplicacy Web management interface."
     }
   ],
   "variables": [
@@ -56,21 +77,28 @@
       "key": "USR_ID",
       "value": "500",
       "mask": false,
-      "description": "User ID used to run Duplicacy. MOS recommended default: 500."
+      "description": "UID used to run Duplicacy. MOS commonly uses UID 500. Change this if the mounted data belongs to another user."
     },
     {
       "name": "Group ID",
       "key": "GRP_ID",
       "value": "500",
       "mask": false,
-      "description": "Group ID used to run Duplicacy. MOS recommended default: 500."
+      "description": "GID used to run Duplicacy. MOS commonly uses GID 500. Change this to match the group permissions of your mounted data."
+    },
+    {
+      "name": "Timezone",
+      "key": "TZ",
+      "value": "Etc/UTC",
+      "mask": false,
+      "description": "Timezone used by Duplicacy Web and scheduled jobs. Change this to your local timezone, for example Europe/Madrid."
     },
     {
       "name": "Duplicacy Web Version",
       "key": "DUPLICACY_WEB_VERSION",
       "value": "Stable",
       "mask": false,
-      "description": "Duplicacy Web version used by the mini image. Stable is recommended."
+      "description": "Duplicacy Web version downloaded by the mini image. Stable is recommended."
     }
   ],
   "devices": [],
