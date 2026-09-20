@@ -1,10 +1,10 @@
 {
   "name": "qBittorrent",
-  "repo": "qbittorrentofficial/qbittorrent-nox:latest",
+  "repo": "lscr.io/linuxserver/qbittorrent:latest",
   "category": [
     "Downloader"
   ],
-  "registry": "https://hub.docker.com/r/qbittorrentofficial/qbittorrent-nox",
+  "registry": "https://github.com/linuxserver/docker-qbittorrent/pkgs/container/qbittorrent",
   "network": "bridge",
   "custom_ip": null,
   "default_shell": "sh",
@@ -16,22 +16,22 @@
   "readme_url": "https://github.com/dannker/mos-templates/blob/main/docs/qbittorrent-migration.md",
   "icon": "https://raw.githubusercontent.com/dannker/mos-templates/main/images/qBittorrent.png",
   "project": "https://www.qbittorrent.org/",
-  "support": "https://github.com/qbittorrent/docker-qbittorrent-nox/issues",
-  "description": "Official headless qBittorrent client with WebUI.",
+  "support": "https://github.com/linuxserver/docker-qbittorrent/issues",
+  "description": "qBittorrent is a BitTorrent client with a Web UI, packaged and maintained by LinuxServer.io.",
   "paths": [
     {
       "name": "Config",
-      "host": "/mnt/cache/appdata/qbittorrent",
+      "host": "/mnt/FAST/appdata/qBittorrent",
       "container": "/config",
       "mode": "rw",
-      "description": "Persistent qBittorrent configuration and session data."
+      "description": "Persistent qBittorrent configuration, torrent state and session data."
     },
     {
       "name": "Downloads",
-      "host": "/mnt/user/downloads",
+      "host": "/mnt/MEDIA/data/torrents",
       "container": "/downloads",
       "mode": "rw",
-      "description": "Torrent download directory."
+      "description": "Torrent download directory. Change this host path to match your MOS storage layout."
     }
   ],
   "ports": [
@@ -40,7 +40,7 @@
       "protocol": "tcp",
       "host": "8080",
       "container": "8080",
-      "description": "qBittorrent WebUI."
+      "description": "qBittorrent Web UI."
     },
     {
       "name": "BitTorrent TCP",
@@ -59,46 +59,46 @@
   ],
   "variables": [
     {
-      "name": "Legal Notice",
-      "key": "QBT_LEGAL_NOTICE",
-      "value": "",
-      "mask": false,
-      "description": "After reading qBittorrent's legal notice, enter confirm to acknowledge it."
-    },
-    {
-      "name": "WebUI Port",
-      "key": "QBT_WEBUI_PORT",
-      "value": "8080",
-      "mask": false,
-      "description": "Internal qBittorrent WebUI port. The Docker port mapping must match."
-    },
-    {
-      "name": "Torrenting Port",
-      "key": "QBT_TORRENTING_PORT",
-      "value": "6881",
-      "mask": false,
-      "description": "Internal BitTorrent listening port. TCP and UDP mappings must match."
-    },
-    {
       "name": "User ID",
       "key": "PUID",
       "value": "500",
       "mask": false,
-      "description": "UID used by qBittorrent. MOS recommended default: 500."
+      "description": "UID used by the LinuxServer container for file ownership. MOS commonly uses UID 500."
     },
     {
       "name": "Group ID",
       "key": "PGID",
       "value": "500",
       "mask": false,
-      "description": "GID used by qBittorrent. MOS recommended default: 500."
+      "description": "GID used by the LinuxServer container for file ownership. MOS commonly uses GID 500."
     },
     {
       "name": "UMASK",
       "key": "UMASK",
-      "value": "022",
+      "value": "002",
       "mask": false,
-      "description": "Permission mask for files created by qBittorrent."
+      "description": "Permission mask for files created by qBittorrent. 002 keeps files group-writable for shared MOS storage."
+    },
+    {
+      "name": "Timezone",
+      "key": "TZ",
+      "value": "Etc/UTC",
+      "mask": false,
+      "description": "Container timezone. Change this to your local timezone, for example Europe/Madrid."
+    },
+    {
+      "name": "WebUI Port",
+      "key": "WEBUI_PORT",
+      "value": "8080",
+      "mask": false,
+      "description": "Internal qBittorrent Web UI port. Must match the mapped container port."
+    },
+    {
+      "name": "Torrenting Port",
+      "key": "TORRENTING_PORT",
+      "value": "6881",
+      "mask": false,
+      "description": "BitTorrent listening port. TCP and UDP container mappings must use the same port."
     }
   ],
   "devices": [],
