@@ -18,28 +18,28 @@
   "icon": "https://raw.githubusercontent.com/dannker/mos-templates/main/images/slskd.png",
   "project": "https://github.com/slskd/slskd",
   "support": "https://github.com/slskd/slskd/issues",
-  "description": "A modern client-server application for the Soulseek file-sharing network with a web interface and reverse proxy support.",
+  "description": "slskd is a modern client-server application for the Soulseek file-sharing network with a web interface, API support and reverse-proxy compatibility.",
   "paths": [
     {
       "name": "AppData",
-      "host": "/mnt/cache/appdata/slskd",
+      "host": "/mnt/FAST/appdata/slskd",
       "container": "/app",
       "mode": "rw",
-      "description": "Persistent slskd configuration, database and application data. Must be writable by UID/GID 500:500."
+      "description": "Persistent slskd configuration, database, logs and application data. Must be writable by the configured container UID/GID."
     },
     {
-      "name": "Downloads",
-      "host": "/mnt/user/downloads/soulsync",
-      "container": "/downloads",
+      "name": "Completed Downloads",
+      "host": "/mnt/PROTECTED/library/music/incoming",
+      "container": "/app/downloads",
       "mode": "rw",
-      "description": "Completed Soulseek downloads. Use the same host directory as SoulSync /app/downloads when integrating both applications."
+      "description": "Completed Soulseek downloads. This directory must be writable by the container user."
     },
     {
       "name": "Shared Music",
-      "host": "/mnt/user/music",
+      "host": "/mnt/PROTECTED/library/music/albums",
       "container": "/music",
       "mode": "ro",
-      "description": "Music directory shared through Soulseek."
+      "description": "Music library shared through Soulseek. Read-only is recommended when slskd only needs to serve existing media."
     }
   ],
   "ports": [
@@ -48,21 +48,21 @@
       "protocol": "tcp",
       "host": "5030",
       "container": "5030",
-      "description": "slskd HTTP web interface."
+      "description": "slskd HTTP web interface and API."
     },
     {
       "name": "HTTPS Web UI",
       "protocol": "tcp",
       "host": "5031",
       "container": "5031",
-      "description": "slskd HTTPS web interface using its self-signed certificate."
+      "description": "Optional slskd HTTPS interface using its built-in self-signed certificate."
     },
     {
       "name": "Soulseek",
       "protocol": "tcp",
       "host": "50300",
       "container": "50300",
-      "description": "Incoming Soulseek peer connections."
+      "description": "Incoming Soulseek peer connections. Forward this port if incoming peer connectivity is required."
     }
   ],
   "variables": [
@@ -71,12 +71,12 @@
       "key": "SLSKD_REMOTE_CONFIGURATION",
       "value": "true",
       "mask": false,
-      "description": "Allow configuration changes from the Web UI. Disable this for untrusted or directly Internet-facing deployments."
+      "description": "Allows configuration changes through the Web UI/API. Disable for untrusted or directly Internet-facing deployments."
     },
     {
       "name": "Downloads Directory",
       "key": "SLSKD_DOWNLOADS_DIR",
-      "value": "/downloads",
+      "value": "/app/downloads",
       "mask": false,
       "description": "Directory where completed downloads are stored."
     },
@@ -85,7 +85,35 @@
       "key": "SLSKD_SHARED_DIR",
       "value": "[Music]/music",
       "mask": false,
-      "description": "Directory shared through Soulseek. Multiple paths can be separated with semicolons."
+      "description": "Directory shared through Soulseek. [Music] is the public share alias. Multiple shares can be separated with semicolons."
+    },
+    {
+      "name": "File Umask",
+      "key": "SLSKD_UMASK",
+      "value": "002",
+      "mask": false,
+      "description": "Permissions mask for files created by slskd. 002 creates group-writable files and works well with shared MOS groups."
+    },
+    {
+      "name": "API Key",
+      "key": "SLSKD_API_KEY",
+      "value": "",
+      "mask": true,
+      "description": "Optional primary API key for applications integrating with slskd. Use a strong secret of at least 16 characters."
+    },
+    {
+      "name": "Soulseek Username",
+      "key": "SLSKD_SLSK_USERNAME",
+      "value": "",
+      "mask": false,
+      "description": "Soulseek network username. Required to connect to the Soulseek network."
+    },
+    {
+      "name": "Soulseek Password",
+      "key": "SLSKD_SLSK_PASSWORD",
+      "value": "",
+      "mask": true,
+      "description": "Soulseek network password."
     }
   ],
   "devices": [],
