@@ -21,10 +21,10 @@
   "paths": [
     {
       "name": "Server Data",
-      "host": "/mnt/cache/appdata/nukkit",
+      "host": "/mnt/FAST/appdata/Nukkit",
       "container": "/srv/nukkit",
       "mode": "rw",
-      "description": "Persistent Nukkit configuration, worlds and plugins."
+      "description": "Persistent Nukkit configuration, worlds, plugins and server data."
     }
   ],
   "ports": [
@@ -33,7 +33,7 @@
       "protocol": "udp",
       "host": "19132",
       "container": "19132",
-      "description": "Minecraft Bedrock Edition server port."
+      "description": "Default Minecraft Bedrock Edition server port."
     }
   ],
   "variables": [],
