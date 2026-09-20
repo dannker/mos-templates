@@ -18,53 +18,53 @@
   "icon": "https://raw.githubusercontent.com/dannker/mos-templates/main/images/SoulSync.png",
   "project": "https://github.com/Nezreka/SoulSync",
   "support": "https://github.com/Nezreka/SoulSync/issues",
-  "description": "Intelligent music and video automation platform. Discover, download, organize and sync media using Soulseek and other sources with support for Navidrome, Jellyfin and Plex.",
+  "description": "SoulSync is an intelligent music and video automation platform for discovering, downloading, organizing and synchronizing media using Soulseek and other sources, with integrations for Navidrome, Jellyfin and Plex.",
   "paths": [
     {
       "name": "Config",
-      "host": "/mnt/cache/appdata/soulsync/config",
+      "host": "/mnt/FAST/appdata/SoulSync/config",
       "container": "/app/config",
       "mode": "rw",
-      "description": "Persistent SoulSync configuration."
+      "description": "Persistent SoulSync configuration. Contains config.json and credentials. Back up this directory."
     },
     {
       "name": "Database",
-      "host": "/mnt/cache/appdata/soulsync/data",
+      "host": "/mnt/FAST/appdata/SoulSync/data",
       "container": "/app/data",
       "mode": "rw",
-      "description": "Persistent SoulSync music and video databases and related application data."
+      "description": "Persistent SoulSync music/video databases and related application state."
     },
     {
       "name": "Logs",
-      "host": "/mnt/cache/appdata/soulsync/logs",
+      "host": "/mnt/FAST/appdata/SoulSync/logs",
       "container": "/app/logs",
       "mode": "rw",
-      "description": "SoulSync log files."
+      "description": "Persistent SoulSync log files."
     },
     {
       "name": "Downloads",
-      "host": "/mnt/user/downloads/soulsync",
+      "host": "/mnt/PROTECTED/library/music/incoming",
       "container": "/app/downloads",
       "mode": "rw",
-      "description": "Shared input directory. For slskd integration, map the same host directory into both containers."
+      "description": "Shared input directory for completed downloads. When using slskd, map the same host directory into both containers."
     },
     {
       "name": "Music Library",
-      "host": "/mnt/user/music",
+      "host": "/mnt/PROTECTED/library/music/albums",
       "container": "/app/Transfer",
       "mode": "rw",
-      "description": "Destination for organized music used by Navidrome, Jellyfin or Plex."
+      "description": "Destination for organized music. Configure SoulSync's Transfer/Output path as /app/Transfer."
     },
     {
       "name": "Staging",
-      "host": "/mnt/cache/appdata/soulsync/staging",
+      "host": "/mnt/FAST/appdata/SoulSync/staging",
       "container": "/app/Staging",
       "mode": "rw",
-      "description": "Optional staging and import directory used by SoulSync."
+      "description": "Optional staging/import directory used when importing or processing existing media."
     },
     {
       "name": "Music Videos",
-      "host": "/mnt/user/music-videos",
+      "host": "/mnt/PROTECTED/library/music-videos",
       "container": "/app/MusicVideos",
       "mode": "rw",
       "description": "Optional destination for downloaded music videos."
@@ -83,14 +83,14 @@
       "protocol": "tcp",
       "host": "8888",
       "container": "8888",
-      "description": "Spotify OAuth callback."
+      "description": "Spotify OAuth callback. Keep this mapping synchronized with SOULSYNC_SPOTIFY_CALLBACK_PORT and the configured redirect URI."
     },
     {
       "name": "Tidal OAuth",
       "protocol": "tcp",
       "host": "8889",
       "container": "8889",
-      "description": "Tidal OAuth callback."
+      "description": "Tidal OAuth callback. Keep this mapping synchronized with SOULSYNC_TIDAL_CALLBACK_PORT and the configured redirect URI."
     }
   ],
   "variables": [
@@ -99,35 +99,49 @@
       "key": "PUID",
       "value": "500",
       "mask": false,
-      "description": "User ID used by SoulSync for file ownership. MOS recommended default: 500."
+      "description": "UID used by SoulSync for persistent files. MOS commonly uses UID 500."
     },
     {
       "name": "Group ID",
       "key": "PGID",
       "value": "500",
       "mask": false,
-      "description": "Group ID used by SoulSync for file ownership. MOS recommended default: 500."
+      "description": "GID used by SoulSync for persistent files. MOS commonly uses GID 500."
     },
     {
       "name": "UMASK",
       "key": "UMASK",
-      "value": "022",
+      "value": "002",
       "mask": false,
-      "description": "Permission mask for files created by SoulSync."
+      "description": "Permission mask for files created by SoulSync. 002 keeps files group-writable and works well with shared MOS media libraries."
+    },
+    {
+      "name": "Timezone",
+      "key": "TZ",
+      "value": "Etc/UTC",
+      "mask": false,
+      "description": "Timezone used by SoulSync. Change this to your local timezone, for example Europe/Madrid."
+    },
+    {
+      "name": "Config Path",
+      "key": "SOULSYNC_CONFIG_PATH",
+      "value": "/app/config/config.json",
+      "mask": false,
+      "description": "Path to SoulSync's persistent configuration file."
     },
     {
       "name": "Spotify OAuth Callback Port",
       "key": "SOULSYNC_SPOTIFY_CALLBACK_PORT",
       "value": "8888",
       "mask": false,
-      "description": "Spotify OAuth callback port. Must match the mapped port and configured redirect URI."
+      "description": "Spotify OAuth callback port. Must match the Docker port mapping and configured Spotify redirect URI."
     },
     {
       "name": "Tidal OAuth Callback Port",
       "key": "SOULSYNC_TIDAL_CALLBACK_PORT",
       "value": "8889",
       "mask": false,
-      "description": "Tidal OAuth callback port. Must match the mapped port and configured redirect URI."
+      "description": "Tidal OAuth callback port. Must match the Docker port mapping and configured Tidal redirect URI."
     }
   ],
   "devices": [],
