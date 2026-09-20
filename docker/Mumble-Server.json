@@ -21,10 +21,10 @@
   "paths": [
     {
       "name": "AppData",
-      "host": "/mnt/cache/appdata/mumble",
+      "host": "/mnt/FAST/appdata/MumbleServer",
       "container": "/data",
       "mode": "rw",
-      "description": "Persistent Mumble database and server configuration."
+      "description": "Persistent Mumble server database and application data. The official image manages ownership of this directory using PUID and PGID."
     }
   ],
   "ports": [
@@ -33,14 +33,14 @@
       "protocol": "tcp",
       "host": "64738",
       "container": "64738",
-      "description": "Mumble TCP connection port."
+      "description": "Mumble TCP connection and control traffic."
     },
     {
       "name": "Mumble UDP",
       "protocol": "udp",
       "host": "64738",
       "container": "64738",
-      "description": "Mumble UDP voice traffic."
+      "description": "Mumble UDP voice traffic. Forward this port when accepting connections from outside the local network."
     }
   ],
   "variables": [
@@ -49,35 +49,35 @@
       "key": "PUID",
       "value": "500",
       "mask": false,
-      "description": "UID used by the Mumble server process. MOS recommended default: 500."
+      "description": "UID used by the Mumble server process and for files in /data. MOS commonly uses UID 500."
     },
     {
       "name": "Group ID",
       "key": "PGID",
       "value": "500",
       "mask": false,
-      "description": "GID used by the Mumble server process. MOS recommended default: 500."
+      "description": "GID used by the Mumble server process and for files in /data. MOS commonly uses GID 500."
     },
     {
       "name": "SuperUser Password",
       "key": "MUMBLE_SUPERUSER_PASSWORD",
       "value": "",
       "mask": true,
-      "description": "Optional password for the Mumble SuperUser account. A random password is generated on first startup when omitted."
+      "description": "Optional administrator password for the built-in SuperUser account. If omitted, the container generates one at first startup; check the container logs."
     },
     {
       "name": "Server Password",
       "key": "MUMBLE_CONFIG_SERVER_PASSWORD",
       "value": "",
       "mask": true,
-      "description": "Optional password users must enter to connect to the server."
+      "description": "Optional password users must provide to connect to the Mumble server. Leave empty for a server without a connection password."
     },
     {
       "name": "Maximum Users",
       "key": "MUMBLE_CONFIG_USERS",
       "value": "100",
       "mask": false,
-      "description": "Maximum number of simultaneous users."
+      "description": "Maximum number of simultaneous users allowed on the server."
     }
   ],
   "devices": [],
