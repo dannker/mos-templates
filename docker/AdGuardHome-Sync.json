@@ -1,124 +1,104 @@
 {
-  "name": "AdGuardHome-Sync",
-  "repo": "ghcr.io/bakito/adguardhome-sync:latest",
+  "name": "Duplicacy",
+  "repo": "saspus/duplicacy-web:mini",
   "category": [
-    "Network"
+    "Backup"
   ],
-  "registry": "https://github.com/bakito/adguardhome-sync/pkgs/container/adguardhome-sync",
+  "registry": "https://hub.docker.com/r/saspus/duplicacy-web",
   "network": "bridge",
   "custom_ip": null,
   "default_shell": "sh",
   "privileged": false,
-  "extra_parameters": "--restart=unless-stopped",
-  "post_parameters": "run",
+  "extra_parameters": "--restart=unless-stopped --hostname=duplicacy-mos",
+  "post_parameters": null,
   "cpu_set": null,
-  "web_ui_url": "http://[IP]:[PORT:8080]/",
-  "readme_url": "https://github.com/dannker/mos-templates/blob/main/docs/adguardhome-sync.md",
-  "icon": "https://raw.githubusercontent.com/dannker/mos-templates/main/images/AdGuardHome-Sync.png",
-  "project": "https://github.com/bakito/adguardhome-sync",
-  "support": "https://github.com/bakito/adguardhome-sync/issues",
-  "description": "Synchronize AdGuard Home configuration from one origin instance to one or more replica instances.",
-  "paths": [],
+  "web_ui_url": "http://[IP]:[PORT:3875]/",
+  "readme_url": "https://github.com/dannker/mos-templates/blob/main/docs/duplicacy-migration.md",
+  "icon": "https://raw.githubusercontent.com/dannker/mos-templates/main/images/Duplicacy.png",
+  "project": "https://duplicacy.com/",
+  "support": "https://forum.duplicacy.com/",
+  "description": "Duplicacy Web using the saspus mini image. Backup sources should normally be mounted read-only, backup storage must be read/write for backup and prune operations, and restores should use a separate read/write target.",
+  "paths": [
+    {
+      "name": "Config",
+      "host": "/mnt/FAST/appdata/Duplicacy",
+      "container": "/config",
+      "mode": "rw",
+      "description": "Persistent Duplicacy Web configuration and machine ID. Back up this directory. Change the FAST pool name if your MOS appdata is stored elsewhere."
+    },
+    {
+      "name": "Cache",
+      "host": "/mnt/FAST/appdata/Duplicacy/cache",
+      "container": "/cache",
+      "mode": "rw",
+      "description": "Transient Duplicacy cache. This directory can be safely recreated."
+    },
+    {
+      "name": "Logs",
+      "host": "/mnt/FAST/appdata/Duplicacy/logs",
+      "container": "/logs",
+      "mode": "rw",
+      "description": "Duplicacy Web log files."
+    },
+    {
+      "name": "Backup Storage - Example",
+      "host": "/mnt/remotes/REMOTE/Duplicacy",
+      "container": "/backup",
+      "mode": "rw",
+      "description": "EXAMPLE: storage containing Duplicacy snapshots and chunks. EDIT this host path before use. It must be read/write so Duplicacy can backup, check, copy and prune. For SMB/NFS storage, mount the remote on MOS first and verify that the Duplicacy UID/GID can create and delete files."
+    },
+    {
+      "name": "Backup Source - Example",
+      "host": "/mnt/PROTECTED/data",
+      "container": "/source",
+      "mode": "ro",
+      "description": "EXAMPLE INPUT: data to be backed up. Read-only is recommended and protects production data from accidental modification. Add additional source mounts as needed."
+    },
+    {
+      "name": "Restore Target - Example",
+      "host": "/mnt/PROTECTED/restore",
+      "container": "/restore",
+      "mode": "rw",
+      "description": "EXAMPLE OUTPUT: dedicated destination for restores. Must be read/write. Restoring to a separate directory is recommended so restored data can be verified before replacing production files."
+    }
+  ],
   "ports": [
     {
-      "name": "Web UI / API",
+      "name": "Web UI",
       "protocol": "tcp",
-      "host": "8080",
-      "container": "8080",
-      "description": "AdGuardHome-Sync web dashboard and API."
+      "host": "3875",
+      "container": "3875",
+      "description": "Duplicacy Web management interface."
     }
   ],
   "variables": [
     {
-      "name": "Origin URL",
-      "key": "ORIGIN_URL",
-      "value": "",
+      "name": "User ID",
+      "key": "USR_ID",
+      "value": "500",
       "mask": false,
-      "description": "URL of the source AdGuard Home instance, for example http://192.168.1.10."
+      "description": "UID used to run Duplicacy. MOS commonly uses UID 500. Change this if the mounted data belongs to another user."
     },
     {
-      "name": "Origin Username",
-      "key": "ORIGIN_USERNAME",
-      "value": "",
+      "name": "Group ID",
+      "key": "GRP_ID",
+      "value": "500",
       "mask": false,
-      "description": "Username for the source AdGuard Home instance."
+      "description": "GID used to run Duplicacy. MOS commonly uses GID 500. Change this to match the group permissions of your mounted data."
     },
     {
-      "name": "Origin Password",
-      "key": "ORIGIN_PASSWORD",
-      "value": "",
-      "mask": true,
-      "description": "Password for the source AdGuard Home instance."
-    },
-    {
-      "name": "Replica 1 URL",
-      "key": "REPLICA1_URL",
-      "value": "",
+      "name": "Timezone",
+      "key": "TZ",
+      "value": "Etc/UTC",
       "mask": false,
-      "description": "URL of the first replica AdGuard Home instance, for example http://192.168.1.11."
+      "description": "Timezone used by Duplicacy Web and scheduled jobs. Change this to your local timezone, for example Europe/Madrid."
     },
     {
-      "name": "Replica 1 Username",
-      "key": "REPLICA1_USERNAME",
-      "value": "",
+      "name": "Duplicacy Web Version",
+      "key": "DUPLICACY_WEB_VERSION",
+      "value": "Stable",
       "mask": false,
-      "description": "Username for the first replica AdGuard Home instance."
-    },
-    {
-      "name": "Replica 1 Password",
-      "key": "REPLICA1_PASSWORD",
-      "value": "",
-      "mask": true,
-      "description": "Password for the first replica AdGuard Home instance."
-    },
-    {
-      "name": "Cron Schedule",
-      "key": "CRON",
-      "value": "0 */2 * * *",
-      "mask": false,
-      "description": "Cron expression controlling how often synchronization runs. Default: every two hours."
-    },
-    {
-      "name": "Run On Start",
-      "key": "RUN_ON_START",
-      "value": "true",
-      "mask": false,
-      "description": "Run a synchronization immediately when the container starts."
-    },
-    {
-      "name": "API Port",
-      "key": "API_PORT",
-      "value": "8080",
-      "mask": false,
-      "description": "Port used by the web dashboard and API. Set to 0 to disable the API."
-    },
-    {
-      "name": "Dark Mode",
-      "key": "API_DARK_MODE",
-      "value": "false",
-      "mask": false,
-      "description": "Enable dark mode for the AdGuardHome-Sync web interface."
-    },
-    {
-      "name": "Log Level",
-      "key": "LOG_LEVEL",
-      "value": "info",
-      "mask": false,
-      "description": "Logging level: debug, info, warn or error."
-    },
-    {
-      "name": "Origin Skip TLS Verification",
-      "key": "ORIGIN_INSECURE_SKIP_VERIFY",
-      "value": "false",
-      "mask": false,
-      "description": "Disable TLS certificate verification for the origin instance. Leave false unless required."
-    },
-    {
-      "name": "Replica 1 Skip TLS Verification",
-      "key": "REPLICA1_INSECURE_SKIP_VERIFY",
-      "value": "false",
-      "mask": false,
-      "description": "Disable TLS certificate verification for the first replica. Leave false unless required."
+      "description": "Duplicacy Web version downloaded by the mini image. Stable is recommended."
     }
   ],
   "devices": [],
