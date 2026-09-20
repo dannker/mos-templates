@@ -17,21 +17,21 @@
   "icon": "https://raw.githubusercontent.com/dannker/mos-templates/main/images/Navidrome.png",
   "project": "https://www.navidrome.org/",
   "support": "https://github.com/navidrome/navidrome/issues",
-  "description": "Navidrome is a modern open source music server and streamer compatible with Subsonic clients.",
+  "description": "Navidrome is a lightweight open-source music server and streamer compatible with Subsonic and OpenSubsonic clients.",
   "paths": [
     {
       "name": "AppData",
-      "host": "/mnt/cache/appdata/navidrome",
+      "host": "/mnt/FAST/appdata/Navidrome",
       "container": "/data",
       "mode": "rw",
-      "description": "Navidrome database, configuration and cache."
+      "description": "Persistent Navidrome database, configuration, playlists and cache. The container UID/GID must have read/write access to this directory."
     },
     {
       "name": "Music",
-      "host": "/mnt/user/music",
+      "host": "/mnt/PROTECTED/library/music",
       "container": "/music",
       "mode": "ro",
-      "description": "Music library. The container user must have read access to this directory."
+      "description": "Music library. Read-only is recommended. Change this host path to match the location of your music library."
     }
   ],
   "ports": [
@@ -40,7 +40,7 @@
       "protocol": "tcp",
       "host": "4533",
       "container": "4533",
-      "description": "Navidrome web interface and Subsonic API."
+      "description": "Navidrome web interface and Subsonic/OpenSubsonic API."
     }
   ],
   "variables": [
@@ -56,28 +56,35 @@
       "key": "ND_SCANNER_SCHEDULE",
       "value": "0",
       "mask": false,
-      "description": "Automatic music library scan schedule. 0 disables scheduled scans."
+      "description": "Cron schedule for automatic library scans. 0 disables scheduled scans; filesystem watching and startup scanning remain controlled separately."
     },
     {
       "name": "Session Timeout",
       "key": "ND_SESSIONTIMEOUT",
       "value": "48h",
       "mask": false,
-      "description": "Web UI session timeout."
+      "description": "Maximum idle time before a Web UI session is closed."
     },
     {
       "name": "Base URL",
       "key": "ND_BASEURL",
       "value": "",
       "mask": false,
-      "description": "Optional base URL when serving Navidrome from a subpath or external URL."
+      "description": "Optional URL path prefix when serving Navidrome from a subpath, for example /music. Leave empty when using a dedicated hostname."
     },
     {
       "name": "Image Cache Size",
       "key": "ND_IMAGECACHESIZE",
       "value": "100MB",
       "mask": false,
-      "description": "Maximum size of the artwork image cache."
+      "description": "Maximum size of the artwork image cache. Set to 0 to disable the image cache."
+    },
+    {
+      "name": "Share URL",
+      "key": "ND_SHAREURL",
+      "value": "",
+      "mask": false,
+      "description": "Optional public base URL used for shared links, for example https://music.example.com. Leave empty to use the current server address."
     }
   ],
   "devices": [],
