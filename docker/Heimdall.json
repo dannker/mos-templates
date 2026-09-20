@@ -16,15 +16,15 @@
   "readme_url": "https://docs.linuxserver.io/images/docker-heimdall/",
   "icon": "https://raw.githubusercontent.com/dannker/mos-templates/main/images/Heimdall.png",
   "project": "https://heimdall.site/",
-  "support": "https://github.com/linuxserver/docker-heimdall/issues",
-  "description": "Heimdall is an application dashboard for organising links to your most used websites and web applications.",
+  "support": "https://github.com/linuxserver/Heimdall/issues",
+  "description": "Heimdall is an application dashboard and launcher for organising links to websites, self-hosted services and web applications.",
   "paths": [
     {
       "name": "Config",
-      "host": "/mnt/cache/appdata/heimdall",
+      "host": "/mnt/FAST/appdata/Heimdall",
       "container": "/config",
       "mode": "rw",
-      "description": "Persistent Heimdall configuration and application data."
+      "description": "Persistent Heimdall configuration and application data. Change the FAST pool name if your MOS appdata is stored elsewhere."
     }
   ],
   "ports": [
@@ -33,37 +33,44 @@
       "protocol": "tcp",
       "host": "8082",
       "container": "80",
-      "description": "Heimdall HTTP web interface. Uses port 8082 by default to avoid conflict with the MOS WebUI."
+      "description": "Heimdall HTTP web interface. Port 8082 avoids conflicts with the MOS WebUI and can be used as the backend port for an external reverse proxy."
     },
     {
       "name": "HTTPS Web UI",
       "protocol": "tcp",
       "host": "8443",
       "container": "443",
-      "description": "Heimdall HTTPS web interface."
+      "description": "Optional Heimdall HTTPS web interface. Not normally required when TLS is terminated by a reverse proxy."
     }
   ],
   "variables": [
     {
-      "name": "PUID",
+      "name": "User ID",
       "key": "PUID",
       "value": "500",
       "mask": false,
-      "description": "User ID used by the container for file permissions. MOS recommended default: 500."
+      "description": "UID used by the container for persistent files. MOS commonly uses UID 500; change it if your appdata uses another owner."
     },
     {
-      "name": "PGID",
+      "name": "Group ID",
       "key": "PGID",
       "value": "500",
       "mask": false,
-      "description": "Group ID used by the container for file permissions. MOS recommended default: 500."
+      "description": "GID used by the container for persistent files. MOS commonly uses GID 500; change it if your appdata uses another group."
+    },
+    {
+      "name": "Timezone",
+      "key": "TZ",
+      "value": "Etc/UTC",
+      "mask": false,
+      "description": "Timezone used by Heimdall. Change this to your local timezone, for example Europe/Madrid."
     },
     {
       "name": "Allow Internal Requests",
       "key": "ALLOW_INTERNAL_REQUESTS",
       "value": "false",
       "mask": false,
-      "description": "Allow Heimdall to make requests to private or reserved IP addresses. Enable only when required."
+      "description": "Allows Heimdall to make server-side requests to private/reserved IP addresses. Leave false for the safest default. Set true only when internal application lookups are required and Heimdall is appropriately protected."
     }
   ],
   "devices": [],
