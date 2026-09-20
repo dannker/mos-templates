@@ -1,6 +1,6 @@
 {
   "name": "Valkey",
-  "repo": "valkey/valkey:8.0-alpine",
+  "repo": "valkey/valkey:9",
   "category": [
     "System"
   ],
@@ -17,14 +17,14 @@
   "icon": "https://raw.githubusercontent.com/dannker/mos-templates/main/images/Valkey.png",
   "project": "https://valkey.io/",
   "support": "https://github.com/valkey-io/valkey/issues",
-  "description": "Valkey is an open-source high-performance key/value datastore for caching, queues and application data.",
+  "description": "Valkey is an open-source high-performance key/value datastore commonly used for caching, sessions, queues and application data. Port 6379 is not exposed to the host by default; applications should normally connect through a shared Docker network.",
   "paths": [
     {
       "name": "Data",
-      "host": "/mnt/cache/appdata/valkey",
+      "host": "/mnt/FAST/appdata/Valkey",
       "container": "/data",
       "mode": "rw",
-      "description": "Persistent Valkey data. Must be writable by UID/GID 500:500."
+      "description": "Persistent Valkey data. The directory must be writable by the configured container UID/GID."
     }
   ],
   "ports": [],
@@ -34,21 +34,21 @@
       "key": "VALKEY_PASSWORD",
       "value": "",
       "mask": true,
-      "description": "Password required by clients connecting to Valkey. A strong password is recommended."
+      "description": "Password required by clients connecting to Valkey. Use a strong unique password."
     },
     {
       "name": "Maximum Memory",
       "key": "VALKEY_MAXMEMORY",
-      "value": "2gb",
+      "value": "512mb",
       "mask": false,
-      "description": "Maximum amount of memory Valkey may use. Adjust this value for the workload and available RAM."
+      "description": "Maximum amount of memory Valkey may use. Increase this according to the workload and available RAM."
     },
     {
       "name": "Memory Policy",
       "key": "VALKEY_MAXMEMORY_POLICY",
       "value": "noeviction",
       "mask": false,
-      "description": "Eviction policy. Common values include noeviction and allkeys-lru."
+      "description": "Behavior when maxmemory is reached. noeviction rejects writes instead of automatically deleting keys."
     },
     {
       "name": "Append Only",
