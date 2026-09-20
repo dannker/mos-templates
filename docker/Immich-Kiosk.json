@@ -17,14 +17,14 @@
   "icon": "https://raw.githubusercontent.com/dannker/mos-templates/main/images/Immich-Kiosk.png",
   "project": "https://github.com/damongolding/immich-kiosk",
   "support": "https://github.com/damongolding/immich-kiosk/issues",
-  "description": "A configurable web slideshow and digital photo frame for Immich.",
+  "description": "Highly configurable slideshow and digital photo frame for displaying assets from an Immich server.",
   "paths": [
     {
       "name": "Config",
-      "host": "/mnt/cache/appdata/immich-kiosk",
+      "host": "/mnt/FAST/appdata/ImmichKiosk",
       "container": "/config",
       "mode": "rw",
-      "description": "Optional Immich Kiosk config.yaml and related configuration files."
+      "description": "Persistent Immich Kiosk configuration. Store config.yaml and related configuration files here. Change the FAST pool name if your MOS appdata is stored elsewhere."
     }
   ],
   "ports": [
@@ -42,21 +42,35 @@
       "key": "KIOSK_IMMICH_URL",
       "value": "",
       "mask": false,
-      "description": "URL of the Immich server, including port if required."
+      "description": "Required. URL used by Kiosk to reach Immich, for example http://192.168.1.4:8084 or an internal DNS name."
     },
     {
       "name": "Immich API Key",
       "key": "KIOSK_IMMICH_API_KEY",
       "value": "",
       "mask": true,
-      "description": "Immich API key used by Kiosk."
+      "description": "Required. Immich API key used by Kiosk."
+    },
+    {
+      "name": "Language",
+      "key": "LANG",
+      "value": "en_GB",
+      "mask": false,
+      "description": "Locale used by the container. Change to match your preferred locale."
+    },
+    {
+      "name": "Timezone",
+      "key": "TZ",
+      "value": "Etc/UTC",
+      "mask": false,
+      "description": "Timezone used by Immich Kiosk. Example: Europe/Madrid."
     },
     {
       "name": "Duration",
       "key": "KIOSK_DURATION",
       "value": "60",
       "mask": false,
-      "description": "Number of seconds each image or asset is displayed."
+      "description": "Number of seconds each slide is displayed."
     },
     {
       "name": "Albums",
@@ -98,35 +112,35 @@
       "key": "KIOSK_DATE_FORMAT",
       "value": "YYYY/MM/DD",
       "mask": false,
-      "description": "Current date display format."
+      "description": "Date display format."
     },
     {
       "name": "Image Fit",
       "key": "KIOSK_IMAGE_FIT",
       "value": "contain",
       "mask": false,
-      "description": "Image fitting mode: contain, cover or none."
+      "description": "Image fitting mode: none, contain or cover."
     },
     {
       "name": "Background Blur",
       "key": "KIOSK_BACKGROUND_BLUR",
       "value": "true",
       "mask": false,
-      "description": "Display a blurred copy of the image as the background."
+      "description": "Display a blurred copy of the current image as the background."
     },
     {
       "name": "Transition",
       "key": "KIOSK_TRANSITION",
       "value": "none",
       "mask": false,
-      "description": "Image transition effect."
+      "description": "Slide transition effect. Supported examples include none, fade and cross-fade."
     },
     {
       "name": "Show Progress Bar",
       "key": "KIOSK_SHOW_PROGRESS_BAR",
       "value": "false",
       "mask": false,
-      "description": "Show the progress bar for the current slide."
+      "description": "Show a progress bar for the current slide."
     },
     {
       "name": "Cache",
@@ -140,14 +154,14 @@
       "key": "KIOSK_PREFETCH",
       "value": "true",
       "mask": false,
-      "description": "Prefetch upcoming assets for smoother transitions."
+      "description": "Fetch upcoming assets in the background for smoother transitions."
     },
     {
       "name": "Kiosk Password",
       "key": "KIOSK_PASSWORD",
       "value": "",
       "mask": true,
-      "description": "Optional password required when accessing the Kiosk."
+      "description": "Optional password protecting access to the Kiosk."
     }
   ],
   "devices": [],
