@@ -17,21 +17,14 @@
   "icon": "https://raw.githubusercontent.com/dannker/mos-templates/main/images/cooler-control.png",
   "project": "https://coolercontrol.org/",
   "support": "https://docs.coolercontrol.org/",
-  "description": "CoolerControl is a Linux cooling control and monitoring daemon with a built-in web interface. It can control supported fans and cooling devices exposed through hwmon, liquidctl, NVML and other supported backends.",
+  "description": "CoolerControl is a Linux cooling control and monitoring daemon with a built-in web interface.",
   "paths": [
     {
       "name": "Config",
       "host": "/mnt/FAST/appdata/CoolerControl",
       "container": "/etc/coolercontrol",
       "mode": "rw",
-      "description": "Persistent CoolerControl daemon configuration, profiles and settings."
-    },
-    {
-      "name": "Hardware Monitoring",
-      "host": "/sys/class/hwmon",
-      "container": "/sys/class/hwmon",
-      "mode": "rw",
-      "description": "Host hwmon interface. Read/write access is required for fan control through pwm channels."
+      "description": "Persistent CoolerControl configuration."
     }
   ],
   "ports": [
@@ -40,32 +33,10 @@
       "protocol": "tcp",
       "host": "11987",
       "container": "11987",
-      "description": "CoolerControl web interface and REST API."
-    },
-  ],
-  "variables": [
-    {
-      "name": "IPv4 Listen Address",
-      "key": "CC_HOST_IP4",
-      "value": "0.0.0.0",
-      "mask": false,
-      "description": "IPv4 address used by the CoolerControl daemon inside the container. 0.0.0.0 exposes the web interface on the Docker network."
-    },
-    {
-      "name": "Web UI Port",
-      "key": "CC_PORT",
-      "value": "11987",
-      "mask": false,
-      "description": "CoolerControl daemon and Web UI port."
-    },
-    {
-      "name": "Timezone",
-      "key": "TZ",
-      "value": "Etc/UTC",
-      "mask": false,
-      "description": "Container timezone. Example: Europe/Madrid."
+      "description": "CoolerControl web interface."
     }
   ],
+  "variables": [],
   "devices": [],
   "labels": [],
   "gpus": []
