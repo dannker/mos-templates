@@ -1,0 +1,79 @@
+{
+  "name": "CoolerControl",
+  "repo": "coolercontrol/coolercontrold:latest",
+  "category": [
+    "Utilities"
+  ],
+  "registry": "https://hub.docker.com/r/coolercontrol/coolercontrold",
+  "network": "bridge",
+  "custom_ip": null,
+  "default_shell": "sh",
+  "privileged": false,
+  "extra_parameters": "--restart=unless-stopped",
+  "post_parameters": null,
+  "cpu_set": null,
+  "web_ui_url": "http://[IP]:[PORT:11987]/",
+  "readme_url": "https://docs.coolercontrol.org/",
+  "icon": "https://github.com/dannker/mos-templates/blob/main/images/cooler-control.png",
+  "project": "https://coolercontrol.org/",
+  "support": "https://docs.coolercontrol.org/",
+  "description": "CoolerControl is a Linux cooling control and monitoring daemon with a built-in web interface. It can control supported fans and cooling devices exposed through hwmon, liquidctl, NVML and other supported backends.",
+  "paths": [
+    {
+      "name": "Config",
+      "host": "/mnt/FAST/appdata/CoolerControl",
+      "container": "/etc/coolercontrol",
+      "mode": "rw",
+      "description": "Persistent CoolerControl daemon configuration, profiles and settings."
+    },
+    {
+      "name": "Hardware Monitoring",
+      "host": "/sys/class/hwmon",
+      "container": "/sys/class/hwmon",
+      "mode": "rw",
+      "description": "Host hwmon interface. Read/write access is required for fan control through pwm channels."
+    }
+  ],
+  "ports": [
+    {
+      "name": "Web UI",
+      "protocol": "tcp",
+      "host": "11987",
+      "container": "11987",
+      "description": "CoolerControl web interface and REST API."
+    },
+    {
+      "name": "gRPC API",
+      "protocol": "tcp",
+      "host": "11988",
+      "container": "11988",
+      "description": "CoolerControl gRPC API. Normally only needed for integrations or plugins."
+    }
+  ],
+  "variables": [
+    {
+      "name": "IPv4 Listen Address",
+      "key": "CC_HOST_IP4",
+      "value": "0.0.0.0",
+      "mask": false,
+      "description": "IPv4 address used by the CoolerControl daemon inside the container. 0.0.0.0 exposes the web interface on the Docker network."
+    },
+    {
+      "name": "Web UI Port",
+      "key": "CC_PORT",
+      "value": "11987",
+      "mask": false,
+      "description": "CoolerControl daemon and Web UI port."
+    },
+    {
+      "name": "Timezone",
+      "key": "TZ",
+      "value": "Etc/UTC",
+      "mask": false,
+      "description": "Container timezone. Example: Europe/Madrid."
+    }
+  ],
+  "devices": [],
+  "labels": [],
+  "gpus": []
+}
