@@ -14,7 +14,7 @@
   "cpu_set": null,
   "web_ui_url": "http://[IP]:[PORT:11987]/",
   "readme_url": "https://docs.coolercontrol.org/",
-  "icon": "https://github.com/dannker/mos-templates/blob/main/images/cooler-control.png",
+  "icon": "https://raw.githubusercontent.com/dannker/mos-templates/main/images/cooler-control.png",
   "project": "https://coolercontrol.org/",
   "support": "https://docs.coolercontrol.org/",
   "description": "CoolerControl is a Linux cooling control and monitoring daemon with a built-in web interface. It can control supported fans and cooling devices exposed through hwmon, liquidctl, NVML and other supported backends.",
