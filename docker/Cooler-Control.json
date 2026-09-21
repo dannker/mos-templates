@@ -42,13 +42,6 @@
       "container": "11987",
       "description": "CoolerControl web interface and REST API."
     },
-    {
-      "name": "gRPC API",
-      "protocol": "tcp",
-      "host": "11988",
-      "container": "11988",
-      "description": "CoolerControl gRPC API. Normally only needed for integrations or plugins."
-    }
   ],
   "variables": [
     {
