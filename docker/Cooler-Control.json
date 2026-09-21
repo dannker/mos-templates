@@ -13,7 +13,7 @@
   "post_parameters": null,
   "cpu_set": null,
   "web_ui_url": "http://[IP]:[PORT:11987]/",
-  "readme_url": "https://docs.coolercontrol.org/installation/docker",
+  "readme_url": "https://github.com/dannker/mos-templates/blob/main/docs/coolercontrol-mos-hwmon.md",
   "icon": "https://raw.githubusercontent.com/dannker/mos-templates/main/images/cooler-control.png",
   "project": "https://coolercontrol.org/",
   "support": "https://docs.coolercontrol.org/",
