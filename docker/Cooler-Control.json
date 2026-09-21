@@ -13,18 +13,32 @@
   "post_parameters": null,
   "cpu_set": null,
   "web_ui_url": "http://[IP]:[PORT:11987]/",
-  "readme_url": "https://docs.coolercontrol.org/",
+  "readme_url": "https://docs.coolercontrol.org/installation/docker",
   "icon": "https://raw.githubusercontent.com/dannker/mos-templates/main/images/cooler-control.png",
   "project": "https://coolercontrol.org/",
   "support": "https://docs.coolercontrol.org/",
-  "description": "CoolerControl is a Linux cooling control and monitoring daemon with a built-in web interface.",
+  "description": "CoolerControl is a Linux cooling control and monitoring daemon with a built-in Web UI. It supports hwmon/sysfs devices, liquidctl hardware, GPU monitoring, profiles, alerts and automatic fan control.",
   "paths": [
     {
       "name": "Config",
-      "host": "/mnt/FAST/appdata/CoolerControl",
+      "host": "/mnt/FAST/appdata/CoolerControl/config",
       "container": "/etc/coolercontrol",
       "mode": "rw",
-      "description": "Persistent CoolerControl configuration."
+      "description": "Persistent CoolerControl configuration, profiles, alerts, credentials and backups."
+    },
+    {
+      "name": "Data",
+      "host": "/mnt/FAST/appdata/CoolerControl/data",
+      "container": "/var/lib/coolercontrol",
+      "mode": "rw",
+      "description": "Persistent CoolerControl runtime data, plugins and session state."
+    },
+    {
+      "name": "Hardware Monitoring",
+      "host": "/sys/class/hwmon",
+      "container": "/sys/class/hwmon",
+      "mode": "ro",
+      "description": "Provides hardware monitoring sensors to CoolerControl. Read-only access is sufficient for detection and monitoring."
     }
   ],
   "ports": [
@@ -33,7 +47,7 @@
       "protocol": "tcp",
       "host": "11987",
       "container": "11987",
-      "description": "CoolerControl web interface."
+      "description": "CoolerControl Web UI and REST API."
     }
   ],
   "variables": [],
