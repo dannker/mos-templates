@@ -1,1 +1,11 @@
-
+{
+  "name": "Grimmory",
+  "category": [
+    "media"
+  ],
+  "description": "Self-hosted library manager for ebooks, comics and audiobooks, with browser reading, metadata management, BookDrop and MariaDB backend.",
+  "website": "https://grimmory.org",
+  "icon": "https://raw.githubusercontent.com/dannker/mos-templates/main/images/Grimmory.png",
+  "support": "https://github.com/grimmory-tools/grimmory/issues",
+  "web_ui_url": "http://[IP]:6060"
+}
