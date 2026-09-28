@@ -47,13 +47,14 @@ services:
 
     ports:
       - "6060:6060"
-
-    volumes:
-      - ${APPDATA}/data:/app/data
-      - ${BOOKDROP}:/bookdrop
-      - ${CALIBRE_LIBRARY}:/books/calibre:ro
-      - ${SECOND_LIBRARY}:/books/biblioteca2:ro
-
+  
+  volumes:
+    - ${APPDATA}/data:/app/data
+    - ${BOOKDROP}:/bookdrop
+    - ${CALIBRE_LIBRARY}:/books/calibre:ro
+    - ${SECOND_LIBRARY}:/books/calibre2:ro
+    - ${MAIN_LIBRARY}:/books/main
+    
     healthcheck:
       test: ["CMD-SHELL", "wget -q -O - http://localhost:6060/api/v1/healthcheck || exit 1"]
       interval: 60s
