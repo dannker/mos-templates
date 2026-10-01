@@ -45,7 +45,9 @@ services:
         condition: service_healthy
 
     volumes:
-      - ${BOOKS_HOST_PATH}:/books
+      - ${BOOKORBIT_LIBRARY}:/books/main
+      - ${CALIBRE_LIBRARY_1}:/books/calibre1:ro
+      - ${CALIBRE_LIBRARY_2}:/books/calibre2:ro
       - ${APP_DATA_PATH}:/data
 
     read_only: true
@@ -67,7 +69,6 @@ services:
       - no-new-privileges:true
 
     stop_grace_period: 30s
-
 
   postgres:
     container_name: bookorbit-db
