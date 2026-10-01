@@ -1,0 +1,11 @@
+{
+  "name": "BookOrbit",
+  "category": [
+    "media"
+  ],
+  "description": "Self-hosted library and reading platform for ebooks, PDFs, audiobooks and comics, with metadata management, OPDS, Kobo/KOReader sync and native iPhone support.",
+  "website": "https://bookorbit.app",
+  "icon": "https://raw.githubusercontent.com/dannker/mos-templates/main/images/BookOrbit.png",
+  "support": "https://github.com/bookorbit/bookorbit/issues",
+  "web_ui_url": "http://[IP]:3000"
+}
