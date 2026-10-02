@@ -1,1 +1,11 @@
-https://raw.githubusercontent.com/USUARIO/REPO/main/images/Homarr.png
+{
+  "name": "Homarr",
+  "category": [
+    "utilities"
+  ],
+  "description": "Modern self-hosted dashboard for managing and accessing your applications, services and Docker containers.",
+  "website": "https://homarr.dev",
+  "icon": "https://raw.githubusercontent.com/dannker/mos-templates/main/images/Homarr.png",
+  "support": "https://github.com/homarr-labs/homarr/issues",
+  "web_ui_url": "http://[IP]:7575"
+}
