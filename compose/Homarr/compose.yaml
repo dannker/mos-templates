@@ -1,4 +1,3 @@
-
 services:
   homarr:
     image: ghcr.io/homarr-labs/homarr:latest
