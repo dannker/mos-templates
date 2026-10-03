@@ -7,6 +7,9 @@ services:
     restart: unless-stopped
     init: true
 
+    env_file:
+      - .env
+
     ports:
       - "${APP_PORT:-3000}:${PORT:-3000}"
 
@@ -15,39 +18,39 @@ services:
       PORT: ${PORT:-3000}
 
       DATABASE_URL: ${DATABASE_URL:-}
-      POSTGRES_HOST: ${POSTGRES_HOST:-postgres}
+
+      POSTGRES_HOST: ${POSTGRES_HOST:-bookorbit-db}
       POSTGRES_PORT: ${POSTGRES_PORT:-5432}
-      POSTGRES_USER: ${POSTGRES_USER?required}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD?required}
-      POSTGRES_DB: ${POSTGRES_DB?required}
+      POSTGRES_USER: ${POSTGRES_USER:-bookorbit}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB:-bookorbit}
 
-      JWT_SECRET: ${JWT_SECRET?required}
-      PODCAST_ENCRYPTION_KEY: ${PODCAST_ENCRYPTION_KEY?required}
-      SETUP_BOOTSTRAP_TOKEN: ${SETUP_BOOTSTRAP_TOKEN?required}
+      JWT_SECRET: ${JWT_SECRET}
+      PODCAST_ENCRYPTION_KEY: ${PODCAST_ENCRYPTION_KEY:-}
 
-      APP_URL: ${APP_URL?required}
-      CLIENT_URL: ${CLIENT_URL:-${APP_URL?required}}
+      SETUP_BOOTSTRAP_TOKEN: ${SETUP_BOOTSTRAP_TOKEN}
 
-      TZ: ${TZ:-UTC}
+      APP_URL: ${APP_URL}
+      CLIENT_URL: ${CLIENT_URL:-${APP_URL}}
+
+      TZ: ${TZ:-Europe/Madrid}
+
       PUID: ${PUID:-1000}
       PGID: ${PGID:-1000}
 
-      NODE_MAX_OLD_SPACE_SIZE: ${NODE_MAX_OLD_SPACE_SIZE:-auto}
+      NODE_MAX_OLD_SPACE_SIZE: ${NODE_MAX_OLD_SPACE_SIZE:-2048}
 
       BOOK_DOCK_PATH: ${BOOK_DOCK_PATH:-}
-      LIBRARY_BROWSE_ROOT: ${LIBRARY_BROWSE_ROOT:-}
+      LIBRARY_BROWSE_ROOT: ${LIBRARY_BROWSE_ROOT:-/books}
 
       DISABLE_LOCAL_AUTH: ${DISABLE_LOCAL_AUTH:-false}
-      BOOKORBIT_FIX_PERMISSIONS: ${BOOKORBIT_FIX_PERMISSIONS:-true}
 
     depends_on:
       postgres:
         condition: service_healthy
 
     volumes:
-      - ${BOOKORBIT_LIBRARY}:/books/main
-      - ${CALIBRE_LIBRARY_1}:/books/calibre1:ro
-      - ${CALIBRE_LIBRARY_2}:/books/calibre2:ro
+      - ${BOOKS_HOST_PATH}:/books
       - ${COMICS_HOST_PATH}:/comics
       - ${APP_DATA_PATH}:/data
 
@@ -77,9 +80,10 @@ services:
     restart: unless-stopped
 
     environment:
-      POSTGRES_USER: ${POSTGRES_USER?required}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD?required}
-      POSTGRES_DB: ${POSTGRES_DB?required}
+      POSTGRES_USER: ${POSTGRES_USER:-bookorbit}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB:-bookorbit}
+
       PGDATA: /var/lib/postgresql/data/pgdata
 
     volumes:
@@ -87,7 +91,10 @@ services:
 
     healthcheck:
       test:
-        ["CMD-SHELL", 'pg_isready -U "$${POSTGRES_USER}" -d "$${POSTGRES_DB}"']
+        [
+          "CMD-SHELL",
+          'pg_isready -U "$${POSTGRES_USER}" -d "$${POSTGRES_DB}"'
+        ]
       interval: 10s
       timeout: 5s
       retries: 10
