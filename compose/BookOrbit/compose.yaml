@@ -48,6 +48,7 @@ services:
       - ${BOOKORBIT_LIBRARY}:/books/main
       - ${CALIBRE_LIBRARY_1}:/books/calibre1:ro
       - ${CALIBRE_LIBRARY_2}:/books/calibre2:ro
+      - ${COMICS_HOST_PATH}:/comics
       - ${APP_DATA_PATH}:/data
 
     read_only: true
